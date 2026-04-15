@@ -1,0 +1,55 @@
+# ============================================================
+# Git LFS tracking — RAPTOR
+# All binary game assets stored via LFS to keep repo lean.
+# Run `git lfs install` once per machine before first clone/push.
+# ============================================================
+
+# ----- Images -----
+*.png  filter=lfs diff=lfs merge=lfs -text
+*.jpg  filter=lfs diff=lfs merge=lfs -text
+*.jpeg filter=lfs diff=lfs merge=lfs -text
+*.webp filter=lfs diff=lfs merge=lfs -text
+*.tga  filter=lfs diff=lfs merge=lfs -text
+*.psd  filter=lfs diff=lfs merge=lfs -text
+
+# ----- Audio -----
+*.wav  filter=lfs diff=lfs merge=lfs -text
+*.ogg  filter=lfs diff=lfs merge=lfs -text
+*.mp3  filter=lfs diff=lfs merge=lfs -text
+*.flac filter=lfs diff=lfs merge=lfs -text
+
+# ----- Fonts -----
+*.ttf  filter=lfs diff=lfs merge=lfs -text
+*.otf  filter=lfs diff=lfs merge=lfs -text
+*.woff filter=lfs diff=lfs merge=lfs -text
+
+# ----- Godot import cache (binary, regenerated but large) -----
+*.import filter=lfs diff=lfs merge=lfs -text
+
+# ----- Compiled / export artifacts (if accidentally committed) -----
+*.pck  filter=lfs diff=lfs merge=lfs -text
+*.apk  filter=lfs diff=lfs merge=lfs -text
+
+# ============================================================
+# Text file normalization (non-LFS)
+# Ensures consistent line endings across Windows / Linux / macOS.
+# ============================================================
+* text=auto
+
+# Godot scene and resource files — always LF
+*.tscn  text eol=lf
+*.tres  text eol=lf
+*.gdshader text eol=lf
+
+# C# source — always LF
+*.cs    text eol=lf
+*.csproj text eol=lf
+*.sln   text eol=lf
+
+# Config / data
+*.json  text eol=lf
+*.yaml  text eol=lf
+*.yml   text eol=lf
+*.md    text eol=lf
+*.sh    text eol=lf
+*.ps1   text eol=lf

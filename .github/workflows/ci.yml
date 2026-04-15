@@ -1,0 +1,60 @@
+name: CI — Logic Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: xUnit (.NET 8, no Godot)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      # Cache the NuGet global packages folder.
+      # Key includes the lock file hash so the cache is invalidated
+      # whenever package versions change.
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('tests/tests.csproj') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
+      # Only restore the test project.
+      # raptor.csproj uses Godot.NET.Sdk and cannot build without Godot installed.
+      # tests.csproj compiles src/Logic/ directly via <Compile Include> — no Godot needed.
+      - name: Restore
+        run: dotnet restore tests/tests.csproj
+
+      - name: Build (warnings as errors)
+        run: >
+          dotnet build tests/tests.csproj
+          --no-restore
+          --configuration Release
+          -warnaserror
+
+      - name: Test
+        run: >
+          dotnet test tests/tests.csproj
+          --no-build
+          --configuration Release
+          --logger "trx;LogFileName=results.trx"
+          --results-directory TestResults/
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: TestResults/*.trx
