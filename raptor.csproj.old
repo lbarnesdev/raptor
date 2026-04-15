@@ -1,0 +1,20 @@
+<Project Sdk="Godot.NET.Sdk/4.3.0">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RootNamespace>Raptor</RootNamespace>
+    <AssemblyName>raptor</AssemblyName>
+    <!-- Treat all Roslyn warnings as errors in CI -->
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <!--
+    src/Logic/ contains pure C# with zero Godot dependencies.
+    It is included in the game build AND referenced by tests/tests.csproj.
+    No special exclusion needed — Godot.NET.Sdk handles non-Node classes fine.
+  -->
+
+</Project>
