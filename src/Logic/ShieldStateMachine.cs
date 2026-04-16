@@ -5,6 +5,13 @@
 // ZERO Godot dependencies — compiles with plain .NET 8 and is fully
 // testable via xUnit without the engine installed.
 //
+// Change log (ShieldController ticket):
+//   Added OnStateChanged event so Godot-layer ShieldController.cs can
+//   subscribe and update visuals / emit EventBus signals without any Godot
+//   dependency leaking into this class.  The event fires at the END of
+//   OnEnter() — after timers are set — so subscribers see a fully
+//   initialised state.
+//
 // State diagram:
 //
 //   Active ──[hit]──► GracePeriod ──[timer]──► Broken ──[timer]──► Active
@@ -60,6 +67,20 @@ public sealed class ShieldStateMachine : StateMachine<ShieldState>
     /// transitioning to <see cref="ShieldState.Broken"/>.
     /// </summary>
     public float GraceDuration { get; init; } = 0.6f;
+
+    // ── State-change notification ────────────────────────────────────────────
+
+    /// <summary>
+    /// Raised every time the machine enters a new state, after internal timers
+    /// have been set for that state.
+    /// </summary>
+    /// <remarks>
+    /// <c>ShieldController.cs</c> subscribes here to drive visuals and emit
+    /// EventBus signals without requiring any Godot dependency in this class.
+    /// Keeping the event here (rather than on ShieldController) means other
+    /// pure-C# consumers can also subscribe if needed in future.
+    /// </remarks>
+    public event Action<ShieldState>? OnStateChanged;
 
     // ── Convenience query ───────────────────────────────────────────────────
 
@@ -136,9 +157,14 @@ public sealed class ShieldStateMachine : StateMachine<ShieldState>
         }
     }
 
-    /// <summary>Initialise the appropriate timer when entering a timed state.</summary>
+    /// <summary>
+    /// Initialise the appropriate timer when entering a timed state, then
+    /// notify subscribers via <see cref="OnStateChanged"/>.
+    /// </summary>
     protected override void OnEnter(ShieldState state)
     {
+        // Set timers BEFORE firing the event so subscribers see correct values
+        // if they query RechargeTime / GraceDuration in their handler.
         switch (state)
         {
             case ShieldState.GracePeriod:
@@ -149,5 +175,7 @@ public sealed class ShieldStateMachine : StateMachine<ShieldState>
                 _rechargeTimer = RechargeTime;
                 break;
         }
+
+        OnStateChanged?.Invoke(state);
     }
 }
