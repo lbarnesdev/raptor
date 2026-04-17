@@ -51,6 +51,7 @@ def queue_prompt(workflow: dict) -> str:
             message "queue_prompt failed: HTTP {status}".
     """
     payload = json.dumps({"prompt": workflow}).encode("utf-8")
+    #print(payload)
     req = urllib.request.Request(
         url=f"{COMFYUI_URL}/prompt",
         data=payload,

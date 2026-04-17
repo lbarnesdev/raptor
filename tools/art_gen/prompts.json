@@ -1,431 +1,489 @@
 {
   "style_prefix": "comic book art style, bold ink outlines, flat cel shading, high contrast, science fiction military aesthetic, vivid colors, clean edges, game sprite on transparent background, isolated object, no background",
-  "negative_prompt": "photorealistic, photograph, 3d render, watercolor, sketch, pencil, blurry, soft focus, gradient background, text, watermark, multiple objects, cluttered, noisy, grainy, low contrast, realistic skin texture, hyperdetailed, subsurface scattering",
+  "negative_prompt": "photorealistic, photograph, 3d render, watercolor, sketch, pencil, blurry, soft focus, gradient background, background scenery, sky background, ground plane, landscape, environment, clouds, horizon, buildings, 3/4 view, three quarter view, angled view, perspective view, tilted, banking turn, nose down, nose up, pitched up, climbing, ascending, diving, descending, diagonal orientation, isometric, text, watermark, multiple objects, cluttered, noisy, grainy, low contrast, realistic skin texture, hyperdetailed, subsurface scattering",
   "model": "dreamshaper_8",
   "assets": [
+
     {
       "id": "player_idle",
-      "prompt": "F-22 Raptor fighter jet, side view facing right, near-future sci-fi variant, crystalline blue thruster glow, jagged alien-tech hull plating, spectral purple afterburner trail, sleek silhouette, game sprite",
+      "prompt": "F-22 Raptor fighter jet, pure 2D side profile view, cockpit and nose on the LEFT side of the image, twin engines and tail on the RIGHT side of the image, single continuous unbroken fuselage from nose to tail, all parts attached, fuselage perfectly parallel to the bottom edge, level flight attitude not climbing not diving, near-future sci-fi variant, crystalline blue thruster glow, jagged alien-tech hull plating, spectral purple afterburner trail, game sprite",
       "size": [128, 64],
       "frames": 1,
-      "seed": 1001,
+      "seed": 1021,
+      "flip_horizontal": true,
       "output_dir": "assets/sprites/player",
       "filename_pattern": "player_idle.png"
     },
+
     {
       "id": "player_thrust",
-      "prompt": "F-22 Raptor fighter jet, side view facing right, near-future sci-fi variant, bright crystalline blue thrusters at full burn, intense afterburner flame, alien-tech hull plating, game sprite, thrust animation frame",
+      "prompt": "F-22 Raptor fighter jet, pure 2D side profile view, cockpit and nose on the LEFT side of the image, twin engines and tail on the RIGHT side of the image, single continuous unbroken fuselage, fuselage perfectly parallel to the bottom edge, level flight not climbing not diving, near-future sci-fi variant, bright crystalline blue thrusters at full burn, intense afterburner flame, alien-tech hull plating, game sprite",
       "size": [128, 64],
       "frames": 1,
       "seed": 1002,
+      "flip_horizontal": true,
       "output_dir": "assets/sprites/player",
       "filename_pattern": "player_thrust.png"
     },
+
     {
       "id": "player_hit",
-      "prompt": "F-22 Raptor fighter jet, side view facing right, near-future sci-fi variant, hit flash, crackling energy damage effect, orange impact sparks, shield disruption glow, game sprite",
+      "prompt": "F-22 Raptor fighter jet, pure 2D side profile view, cockpit and nose on the LEFT side of the image, twin engines and tail on the RIGHT side of the image, single continuous unbroken fuselage, fuselage perfectly parallel to the bottom edge, level flight not climbing not diving, near-future sci-fi variant, hit flash, crackling energy damage effect, orange impact sparks, shield disruption glow, game sprite",
       "size": [128, 64],
       "frames": 1,
       "seed": 1003,
+      "flip_horizontal": true,
       "output_dir": "assets/sprites/player",
       "filename_pattern": "player_hit.png"
     },
+
     {
       "id": "player_death",
-      "prompt": "F-22 Raptor fighter jet, breaking apart, side view, sci-fi variant, explosion beginning, fragments separating, orange fire, game sprite, destruction animation",
+      "prompt": "F-22 Raptor fighter jet, pure 2D side profile view, cockpit and nose on the LEFT side of the image, twin engines and tail on the RIGHT side of the image, fuselage parallel to bottom edge, breaking apart, near-future sci-fi variant, explosion beginning, fragments separating, orange fire, game sprite",
       "size": [128, 64],
       "frames": 1,
       "seed": 1004,
+      "flip_horizontal": true,
       "output_dir": "assets/sprites/player",
       "filename_pattern": "player_death.png"
     },
+
     {
       "id": "shield_bubble",
-      "prompt": "energy shield bubble, hexagonal cell pattern, translucent blue glow, sci-fi force field, oval shape, game sprite, isolated",
+      "prompt": "energy shield bubble, hexagonal cell pattern, translucent blue glow, sci-fi force field, oval shape, centered in frame, radiating glow outward from center, game sprite, isolated",
       "size": [160, 96],
       "frames": 1,
       "seed": 2001,
       "output_dir": "assets/sprites/player",
       "filename_pattern": "shield_bubble.png"
     },
+
     {
       "id": "shield_break",
-      "prompt": "energy shield shattering, hexagonal fragments flying outward, blue electricity sparks, sci-fi force field destruction, game sprite, isolated",
+      "prompt": "energy shield shattering, hexagonal fragments flying outward from center equally in all directions, blue electricity sparks, sci-fi force field destruction, centered explosion, game sprite, isolated",
       "size": [192, 128],
       "frames": 1,
       "seed": 2002,
       "output_dir": "assets/sprites/player",
       "filename_pattern": "shield_break.png"
     },
+
     {
       "id": "plasma_muzzle_flash",
-      "prompt": "plasma cannon muzzle flash, bright cyan-white burst, circular energy discharge, sci-fi weapon effect, game sprite, isolated",
+      "prompt": "plasma cannon muzzle flash, bright cyan-white burst radiating equally outward from center, circular energy discharge, sci-fi weapon effect, centered in frame, game sprite, isolated",
       "size": [48, 32],
       "frames": 1,
       "seed": 2003,
       "output_dir": "assets/sprites/player",
       "filename_pattern": "plasma_muzzle_flash.png"
     },
+
     {
       "id": "plasma_bolt_player",
-      "prompt": "plasma energy bolt, elongated horizontal capsule shape, bright cyan core, white hot center, glowing edges, sci-fi projectile, game sprite",
+      "prompt": "plasma energy bolt projectile, elongated horizontal capsule shape, sharp pointed tip on the LEFT side of the image, energy trail dissipating to the RIGHT side, bright cyan core, white hot center, glowing edges, horizontal orientation perfectly parallel to image bottom, sci-fi weapon projectile, game sprite",
       "size": [32, 12],
       "frames": 1,
       "seed": 3001,
+      "flip_horizontal": true,
       "output_dir": "assets/sprites/projectiles",
       "filename_pattern": "plasma_bolt_player.png"
     },
+
     {
       "id": "plasma_blob_wraith",
-      "prompt": "alien bioluminescent plasma blob, organic green energy orb, pulsing alien projectile, tendrils of green light, sci-fi bullet, game sprite",
+      "prompt": "alien bioluminescent plasma blob, organic round green energy orb, centered in frame, pulsing alien projectile, tendrils of green light radiating from center, sci-fi bullet, game sprite",
       "size": [20, 20],
       "frames": 1,
       "seed": 3002,
       "output_dir": "assets/sprites/projectiles",
       "filename_pattern": "plasma_blob_wraith.png"
     },
+
     {
       "id": "crystal_spine_specter",
-      "prompt": "red crystalline spine projectile, sharp angular shape, alien red crystal shard, glowing red edges, sci-fi enemy bullet, game sprite",
+      "prompt": "red crystalline spine projectile, sharp pointed crystal tip on the LEFT side of the image, flat broken crystal base on the RIGHT side, horizontal orientation perfectly parallel to image bottom, single continuous crystal shard, alien red crystal with glowing red edges, sci-fi enemy bullet, game sprite",
       "size": [24, 10],
       "frames": 1,
       "seed": 3003,
       "output_dir": "assets/sprites/projectiles",
       "filename_pattern": "crystal_spine_specter.png"
     },
+
     {
       "id": "organic_spore_turret",
-      "prompt": "alien organic spore projectile, round with trailing tendrils, bioluminescent purple-green, hazardous cloud effect, sci-fi turret bullet, game sprite",
+      "prompt": "alien organic spore projectile, round bulbous shape with trailing tendrils, centered in frame, bioluminescent purple-green, hazardous cloud effect, sci-fi turret bullet, game sprite",
       "size": [18, 18],
       "frames": 1,
       "seed": 3004,
       "output_dir": "assets/sprites/projectiles",
       "filename_pattern": "organic_spore_turret.png"
     },
+
     {
       "id": "missile_body",
-      "prompt": "air-to-air missile, sleek aerodynamic body, white and gray military finish, silver warhead, sci-fi near-future variant, side view, game sprite",
+      "prompt": "air-to-air missile, sleek aerodynamic single continuous body, silver warhead nose on the LEFT side of the image, exhaust nozzle on the RIGHT side of the image, horizontal orientation perfectly parallel to image bottom, white and gray military finish, sci-fi near-future variant, game sprite",
       "size": [40, 12],
       "frames": 1,
       "seed": 3005,
+      "flip_horizontal": true,
       "output_dir": "assets/sprites/projectiles",
       "filename_pattern": "missile_body.png"
     },
+
     {
       "id": "missile_trail",
-      "prompt": "rocket exhaust trail, white smoke and orange flame streak, missile thrust plume, side view trailing effect, game sprite",
+      "prompt": "rocket engine exhaust trail, horizontal plume, dense bright orange flame core on the LEFT side of the image transitioning to white dissipating smoke on the RIGHT side, horizontal orientation perfectly parallel to image bottom, thrust plume side view, game sprite fx",
       "size": [48, 10],
       "frames": 1,
       "seed": 3006,
       "output_dir": "assets/sprites/projectiles",
       "filename_pattern": "missile_trail.png"
     },
+
     {
       "id": "explosion_small_0",
-      "prompt": "small explosion frame 1, bright orange and yellow fireball burst, comic book style, radial blast, game sprite fx",
+      "prompt": "small explosion, bright orange and yellow fireball burst radiating outward from center, comic book style, radial blast centered in frame, game sprite fx",
       "size": [48, 48],
       "frames": 6,
       "seed": 4001,
       "output_dir": "assets/sprites/fx",
       "filename_pattern": "explosion_small_{frame}.png"
     },
+
     {
       "id": "explosion_medium_0",
-      "prompt": "medium explosion frame 1, orange fireball with black smoke tendrils, comic book style, expanding ring shockwave, game sprite fx",
+      "prompt": "medium explosion, orange fireball with black smoke tendrils radiating from center, comic book style, expanding ring shockwave centered in frame, game sprite fx",
       "size": [96, 96],
       "frames": 6,
       "seed": 4010,
       "output_dir": "assets/sprites/fx",
       "filename_pattern": "explosion_medium_{frame}.png"
     },
+
     {
       "id": "explosion_large_0",
-      "prompt": "large explosion frame 1, massive orange and white fireball, comic book style, debris fragments, thick black smoke, dramatic scale, game sprite fx",
+      "prompt": "large explosion, massive orange and white fireball radiating from center, comic book style, debris fragments, thick black smoke, centered in frame, dramatic scale, game sprite fx",
       "size": [192, 192],
       "frames": 6,
       "seed": 4020,
       "output_dir": "assets/sprites/fx",
       "filename_pattern": "explosion_large_{frame}.png"
     },
+
     {
       "id": "wraith_fighter_idle",
-      "prompt": "Chinese J-20 stealth fighter jet, side view facing left as enemy, alien possession: bioluminescent green tendrils along fuselage, cracked cockpit with single glowing alien eye, swept-wing delta silhouette, game sprite",
+      "prompt": "Chinese J-20 stealth fighter jet, pure 2D side profile view, cockpit and nose on the RIGHT side of the image, engines and tail on the LEFT side of the image, single continuous unbroken fuselage, fuselage perfectly parallel to the bottom edge, level flight attitude not climbing not diving, alien possession: bioluminescent green tendrils along fuselage, cracked cockpit with single glowing alien eye, swept-wing delta silhouette, game sprite",
       "size": [112, 56],
       "frames": 1,
       "seed": 5001,
+      "flip_horizontal": true,
       "output_dir": "assets/sprites/enemies",
       "filename_pattern": "wraith_fighter_idle.png"
     },
+
     {
       "id": "wraith_fighter_death",
-      "prompt": "Chinese J-20 stealth fighter jet breaking apart, alien possession, green bioluminescent alien tendrils disintegrating, side view, orange explosion beginning, game sprite death frame",
+      "prompt": "Chinese J-20 stealth fighter jet breaking apart, pure 2D side profile view, nose on the RIGHT side of the image, tail on the LEFT side of the image, single continuous fuselage breaking apart, fuselage parallel to bottom edge, alien possession, green bioluminescent alien tendrils disintegrating, orange explosion beginning, game sprite death frame",
       "size": [112, 56],
       "frames": 1,
       "seed": 5002,
+      "flip_horizontal": true,
       "output_dir": "assets/sprites/enemies",
       "filename_pattern": "wraith_fighter_death.png"
     },
+
     {
       "id": "specter_fighter_idle",
-      "prompt": "Russian Su-57 stealth fighter jet, side view facing left as enemy, alien possession: red crystalline growths along fuselage, twin-tail silhouette, trailing alien spore cloud behind engines, game sprite",
+      "prompt": "Russian Su-57 stealth fighter jet, pure 2D side profile view, cockpit and nose on the RIGHT side of the image, twin-tail engines on the LEFT side of the image, single continuous unbroken fuselage, fuselage perfectly parallel to the bottom edge, level flight attitude not climbing not diving, alien possession: red crystalline growths along fuselage, twin-tail silhouette, trailing alien spore cloud behind engines, game sprite",
       "size": [112, 56],
       "frames": 1,
       "seed": 5010,
+      "flip_horizontal": true,
       "output_dir": "assets/sprites/enemies",
       "filename_pattern": "specter_fighter_idle.png"
     },
+
     {
       "id": "specter_fighter_death",
-      "prompt": "Russian Su-57 stealth fighter jet breaking apart, red crystalline alien growths shattering, twin-tail silhouette, side view, crimson explosion, game sprite death frame",
+      "prompt": "Russian Su-57 stealth fighter jet breaking apart, pure 2D side profile view, nose on the RIGHT side of the image, twin-tail engines on the LEFT side of the image, single continuous fuselage breaking apart, fuselage parallel to bottom edge, red crystalline alien growths shattering, crimson explosion, game sprite death frame",
       "size": [112, 56],
       "frames": 1,
       "seed": 5011,
+      "flip_horizontal": true,
       "output_dir": "assets/sprites/enemies",
       "filename_pattern": "specter_fighter_death.png"
     },
+
     {
       "id": "specter_spore_trail",
-      "prompt": "hazardous alien spore cloud trail, lingering purple-red particle cloud, toxic haze effect, sci-fi environmental hazard, elongated horizontal shape, game sprite fx",
+      "prompt": "hazardous alien spore cloud trail, elongated horizontal cloud shape, denser glowing purple-red toxic core on the LEFT side gradually dissipating into faint haze on the RIGHT side, horizontal orientation perfectly parallel to image bottom, sci-fi environmental hazard, game sprite fx",
       "size": [80, 32],
       "frames": 1,
       "seed": 5012,
       "output_dir": "assets/sprites/enemies",
       "filename_pattern": "specter_spore_trail.png"
     },
+
     {
       "id": "harbinger_turret_idle",
-      "prompt": "military SAM anti-air turret, ground-mounted, side view, alien possession: organic coral-like alien growth consuming the hardware, bioluminescent purple veins, turret barrel pointing upward-right, game sprite",
+      "prompt": "military SAM anti-air turret, ground-mounted base sitting at the bottom edge of the image, barrel extending upward and to the right, single complete unit all parts attached, alien possession: organic coral-like alien growth consuming the hardware, bioluminescent purple veins, isolated game sprite",
       "size": [72, 72],
       "frames": 1,
       "seed": 5020,
       "output_dir": "assets/sprites/enemies",
       "filename_pattern": "harbinger_turret_idle.png"
     },
+
     {
       "id": "harbinger_turret_firing",
-      "prompt": "military SAM anti-air turret, ground-mounted, side view, alien possession: organic coral-like growth, muzzle flash at barrel, firing state, turret rotated to fire angle, game sprite",
+      "prompt": "military SAM anti-air turret, ground-mounted base sitting at the bottom edge of the image, barrel extended upward and to the right with muzzle flash at tip, single complete unit all parts attached, alien possession: organic coral-like growth, firing state, isolated game sprite",
       "size": [72, 72],
       "frames": 1,
       "seed": 5021,
       "output_dir": "assets/sprites/enemies",
       "filename_pattern": "harbinger_turret_firing.png"
     },
+
     {
       "id": "harbinger_turret_death",
-      "prompt": "military SAM anti-air turret destroyed, alien organic coral growth burning and disintegrating, explosion fragments, ground-mounted wreckage, side view, game sprite",
+      "prompt": "military SAM anti-air turret destroyed, ground-mounted wreckage at the bottom edge of the image, alien organic coral growth burning and disintegrating, explosion fragments radiating outward from base, isolated game sprite",
       "size": [72, 72],
       "frames": 1,
       "seed": 5022,
       "output_dir": "assets/sprites/enemies",
       "filename_pattern": "harbinger_turret_death.png"
     },
+
     {
       "id": "boss_constitution_intact",
-      "prompt": "US Constitution scroll document, rolled aged parchment, golden paper with visible text lines, alien energy tendrils wrapped around it glowing bright gold, isolated prop, ominous glow",
+      "prompt": "US Constitution scroll document, rolled aged parchment, golden paper with visible text lines, alien energy tendrils wrapped around it glowing bright gold, single isolated prop centered in frame, ominous glow",
       "size": [128, 160],
       "frames": 1,
       "seed": 6010,
       "output_dir": "assets/sprites/boss",
       "filename_pattern": "boss_constitution_intact.png"
     },
+
     {
       "id": "boss_constitution_glowing",
-      "prompt": "US Constitution scroll document, alien energy wrapped around it pulsing golden-white at maximum intensity, weak point fully exposed and radiating outward, crackling electricity along edges, isolated prop",
+      "prompt": "US Constitution scroll document, alien energy wrapped around it pulsing golden-white at maximum intensity, weak point fully exposed and radiating outward, crackling electricity along edges, single isolated prop centered in frame",
       "size": [128, 160],
       "frames": 1,
       "seed": 6011,
       "output_dir": "assets/sprites/boss",
       "filename_pattern": "boss_constitution_glowing.png"
     },
+
     {
       "id": "boss_constitution_destroyed",
-      "prompt": "US Constitution scroll document disintegrating, alien energy exploding outward in gold burst, parchment dissolving into static electricity and ash, destruction effect, isolated prop",
+      "prompt": "US Constitution scroll document disintegrating, alien energy exploding outward in gold burst, parchment dissolving into static electricity and ash, destruction effect centered in frame, isolated prop",
       "size": [160, 192],
       "frames": 1,
       "seed": 6012,
       "output_dir": "assets/sprites/boss",
       "filename_pattern": "boss_constitution_destroyed.png"
     },
+
     {
       "id": "boss_fox_logo_intact",
-      "prompt": "Fox News logo sign embedded in glowing alien skull cavity, alien energy tendrils wrapped around the logo, bioluminescent broadcast signal waves radiating outward, sinister propaganda tower effect, isolated prop",
+      "prompt": "Fox News logo sign embedded in glowing alien skull cavity, alien energy tendrils wrapped around the logo, bioluminescent broadcast signal waves radiating outward, sinister propaganda tower effect, single isolated prop centered in frame",
       "size": [160, 128],
       "frames": 1,
       "seed": 6020,
       "output_dir": "assets/sprites/boss",
       "filename_pattern": "boss_fox_logo_intact.png"
     },
+
     {
       "id": "boss_fox_logo_glowing",
-      "prompt": "Fox News logo sign in alien skull cavity, weak point fully exposed, intense golden broadcast signal at maximum output radiating in all directions, alien amplification overload effect, isolated prop",
+      "prompt": "Fox News logo sign in alien skull cavity, weak point fully exposed, intense golden broadcast signal at maximum output radiating in all directions, alien amplification overload effect, single isolated prop centered in frame",
       "size": [160, 128],
       "frames": 1,
       "seed": 6021,
       "output_dir": "assets/sprites/boss",
       "filename_pattern": "boss_fox_logo_glowing.png"
     },
+
     {
       "id": "boss_fox_logo_destroyed",
-      "prompt": "Fox News logo sign exploding in burst of static and broken signal pixels, alien broadcast cut off, skull cavity blackening and collapsing, television static explosion effect, isolated prop",
+      "prompt": "Fox News logo sign exploding in burst of static and broken signal pixels, alien broadcast cut off, skull cavity blackening and collapsing, television static explosion effect centered in frame, isolated prop",
       "size": [192, 160],
       "frames": 1,
       "seed": 6022,
       "output_dir": "assets/sprites/boss",
       "filename_pattern": "boss_fox_logo_destroyed.png"
     },
+
     {
       "id": "boss_toupee_closed",
-      "prompt": "large combover toupee hairpiece sitting atop enormous caricature skull, side view, hair swept over in disheveled pompadour style, closed and intact as if covering something beneath, isolated prop",
+      "prompt": "large combover toupee hairpiece sitting atop enormous caricature skull, side profile view facing left, front of hairpiece on the LEFT side of image, back on the RIGHT side, hair swept over in disheveled pompadour style, closed and intact as if covering something beneath, single isolated prop",
       "size": [256, 128],
       "frames": 1,
       "seed": 6030,
       "output_dir": "assets/sprites/boss",
       "filename_pattern": "boss_toupee_closed.png"
     },
+
     {
       "id": "boss_toupee_open",
-      "prompt": "large combover toupee hairpiece flipped open like a hatch door, hinged at the back, interior skull cavity glowing with alien energy visible below, dramatic stage-reveal pose, isolated prop",
+      "prompt": "large combover toupee hairpiece flipped open like a hatch door, side profile view facing left, front of hairpiece on the LEFT side of image, hinge on the RIGHT side, interior skull cavity glowing with alien energy visible below, dramatic stage-reveal pose, single isolated prop",
       "size": [256, 192],
       "frames": 1,
       "seed": 6031,
       "output_dir": "assets/sprites/boss",
       "filename_pattern": "boss_toupee_open.png"
     },
+
     {
       "id": "boss_statue_liberty_tentacled",
-      "prompt": "Statue of Liberty, full figure side view, alien tentacle cluster coiled around torch arm and crown, Lady Liberty face obscured by alien appendage, bioluminescent green-purple alien glow, being wielded as an alien weapon, isolated prop",
+      "prompt": "Statue of Liberty, full figure side profile view facing left, face and torch arm on the LEFT side of the image, base on the RIGHT side, alien tentacle cluster coiled around torch arm and crown, Lady Liberty face obscured by alien appendage, bioluminescent green-purple alien glow, single isolated prop",
       "size": [256, 512],
       "frames": 1,
       "seed": 6040,
       "output_dir": "assets/sprites/boss",
       "filename_pattern": "boss_statue_liberty_tentacled.png"
     },
+
     {
       "id": "boss_statue_liberty_free",
-      "prompt": "Statue of Liberty, full figure side view, freed from alien control, glowing triumphant golden light emanating from torch, Lady Liberty face and crown visible and unobstructed, warm golden aura radiating outward, isolated prop",
+      "prompt": "Statue of Liberty, full figure side profile view facing left, face and torch arm on the LEFT side of the image, base on the RIGHT side, freed from alien control, glowing triumphant golden light emanating from torch, Lady Liberty face and crown visible and unobstructed, warm golden aura radiating outward, single isolated prop",
       "size": [256, 512],
       "frames": 1,
       "seed": 6041,
       "output_dir": "assets/sprites/boss",
       "filename_pattern": "boss_statue_liberty_free.png"
     },
+
     {
       "id": "boss_tentacle_cluster_idle",
-      "prompt": "cluster of thick alien tentacles, writhing organic mass, bioluminescent green-purple coloring, coiled and slowly grasping, alien bio-mechanical texture, side view, isolated game sprite",
+      "prompt": "cluster of thick alien tentacles, writhing organic mass centered in frame, bioluminescent green-purple coloring, coiled and slowly grasping, alien bio-mechanical texture, single complete cluster all tentacles attached, isolated game sprite",
       "size": [128, 128],
       "frames": 1,
       "seed": 6050,
       "output_dir": "assets/sprites/boss",
       "filename_pattern": "boss_tentacle_cluster_idle.png"
     },
+
     {
       "id": "boss_tentacle_cluster_hit",
-      "prompt": "cluster of alien tentacles recoiling from damage, white impact flash across bioluminescent surface, plasma burn scorch marks, tentacles curling back in pain response, alien biology, isolated game sprite fx",
+      "prompt": "cluster of alien tentacles recoiling from damage, white impact flash across bioluminescent surface, plasma burn scorch marks, tentacles curling back in pain response, centered in frame, alien biology, isolated game sprite fx",
       "size": [128, 128],
       "frames": 1,
       "seed": 6051,
       "output_dir": "assets/sprites/boss",
       "filename_pattern": "boss_tentacle_cluster_hit.png"
     },
+
     {
       "id": "boss_tentacle_cluster_destroyed",
-      "prompt": "cluster of alien tentacles destroyed and disintegrating, explosion of alien ichor and bioluminescent green energy fragments, violent biomass destruction, isolated game sprite fx",
+      "prompt": "cluster of alien tentacles destroyed and disintegrating, explosion of alien ichor and bioluminescent green energy fragments radiating outward from center, violent biomass destruction, centered in frame, isolated game sprite fx",
       "size": [160, 160],
       "frames": 1,
       "seed": 6052,
       "output_dir": "assets/sprites/boss",
       "filename_pattern": "boss_tentacle_cluster_destroyed.png"
     },
+
     {
       "id": "boss_hate_shuriken",
-      "prompt": "angular four-pointed throwing star shuriken, sharp geometric blades, dark gunmetal finish with deep red glowing energy edges, menacing sci-fi weapon projectile, spinning motion suggestion, isolated game sprite",
+      "prompt": "angular four-pointed throwing star shuriken, sharp geometric blades radiating from center equally, dark gunmetal finish with deep red glowing energy edges, menacing sci-fi weapon projectile, centered in frame, spinning motion suggestion, isolated game sprite",
       "size": [40, 40],
       "frames": 1,
       "seed": 6060,
       "output_dir": "assets/sprites/boss",
       "filename_pattern": "boss_hate_shuriken.png"
     },
+
     {
       "id": "boss_hate_shuriken_alt",
-      "prompt": "angular four-pointed throwing star shuriken, sharp geometric blades, cracked skull symbol etched into center plate, dark gunmetal with red glowing edges, content-toggle alternate design, isolated game sprite",
+      "prompt": "angular four-pointed throwing star shuriken, sharp geometric blades radiating from center equally, cracked skull symbol etched into center plate, dark gunmetal with red glowing edges, centered in frame, isolated game sprite",
       "size": [40, 40],
       "frames": 1,
       "seed": 6061,
       "output_dir": "assets/sprites/boss",
       "filename_pattern": "boss_hate_shuriken_alt.png"
     },
+
     {
       "id": "alien_passenger_idle",
-      "prompt": "tiny alien creature, spindly tentacle legs, enormous black oval eyes taking up most of bulbous oversized skull, small t-shirt with PROPAGANDA printed on it, hovering calmly near a giant human ear, sinister composed expression, isolated game sprite",
+      "prompt": "tiny alien creature, spindly tentacle legs, enormous black oval eyes taking up most of bulbous oversized skull, small t-shirt with PROPAGANDA printed on it, hovering calmly, sinister composed expression, single complete creature centered in frame, isolated game sprite",
       "size": [96, 128],
       "frames": 1,
       "seed": 6070,
       "output_dir": "assets/sprites/boss",
       "filename_pattern": "alien_passenger_idle.png"
     },
+
     {
       "id": "alien_passenger_agitated",
-      "prompt": "tiny alien creature, spindly tentacle legs flailing wildly, enormous black oval eyes wide with agitation, bulbous skull, PROPAGANDA t-shirt, erratic crackling energy bursts from body, frantic panicked pose, isolated game sprite",
+      "prompt": "tiny alien creature, spindly tentacle legs flailing wildly, enormous black oval eyes wide with agitation, bulbous skull, PROPAGANDA t-shirt, erratic crackling energy bursts from body, frantic panicked pose, single complete creature centered in frame, isolated game sprite",
       "size": [96, 128],
       "frames": 1,
       "seed": 6071,
       "output_dir": "assets/sprites/boss",
       "filename_pattern": "alien_passenger_agitated.png"
     },
+
     {
       "id": "alien_passenger_detached",
-      "prompt": "tiny alien creature mid-detachment from host ear, spindly tentacle legs pushing off, enormous black oval eyes wide with alarm, PROPAGANDA t-shirt, glowing bio-connection tendrils still trailing behind it, isolated game sprite",
+      "prompt": "tiny alien creature mid-detachment, spindly tentacle legs pushing off toward the RIGHT side of the image, enormous black oval eyes wide with alarm, PROPAGANDA t-shirt, glowing bio-connection tendrils trailing behind it on the LEFT side, single complete creature, isolated game sprite",
       "size": [96, 128],
       "frames": 1,
       "seed": 6072,
       "output_dir": "assets/sprites/boss",
       "filename_pattern": "alien_passenger_detached.png"
     },
+
     {
       "id": "alien_passenger_flee",
-      "prompt": "tiny alien creature fleeing at maximum speed, spindly tentacle legs stretched out behind it, enormous black oval eyes wide with terror, PROPAGANDA t-shirt, strong motion blur trail, desperate escape pose leaning forward, isolated game sprite",
+      "prompt": "tiny alien creature fleeing at maximum speed toward the RIGHT side of the image, body leaning forward toward the RIGHT, spindly tentacle legs stretched out behind it on the LEFT side, enormous black oval eyes wide with terror, PROPAGANDA t-shirt, strong motion blur trail on the LEFT side, single complete creature, isolated game sprite",
       "size": [112, 96],
       "frames": 1,
       "seed": 6073,
       "output_dir": "assets/sprites/boss",
       "filename_pattern": "alien_passenger_flee.png"
     },
+
     {
       "id": "boss_demagogue_phase1",
-      "prompt": "giant political caricature boss, enormous disproportionate head atop tiny suited body, navy blue suit, long red necktie reaching below waist, comically tiny hands, one hand extended open palm forward, exaggerated pompadour hair, exaggerated facial features, comic book super-villain style, side-facing",
+      "prompt": "giant political caricature boss, side profile view facing left, face and chest on the LEFT side of the image, back of suit on the RIGHT side, enormous disproportionate head atop tiny suited body, navy blue suit, long red necktie reaching below waist, comically tiny hands, one hand extended open palm forward toward the left, exaggerated pompadour hair, exaggerated facial features, comic book super-villain style",
       "size": [512, 768],
       "frames": 1,
       "seed": 6001,
       "output_dir": "assets/sprites/boss",
       "filename_pattern": "boss_demagogue_phase1.png"
     },
+
     {
       "id": "boss_demagogue_phase2",
-      "prompt": "giant political caricature boss, enormous head, navy blue suit with visible damage tears from phase 1, red tie, pompadour hair flipped open like a hatch at the top revealing glowing alien skull cavity interior, alien energy emanating from open toupee hatch, comic book super-villain style, side-facing",
+      "prompt": "giant political caricature boss, side profile view facing left, face and chest on the LEFT side of the image, back of suit on the RIGHT side, enormous head, navy blue suit with visible damage tears, red tie, pompadour hair flipped open like a hatch at the top revealing glowing alien skull cavity interior, alien energy emanating from open toupee hatch, comic book super-villain style",
       "size": [512, 768],
       "frames": 1,
       "seed": 6002,
       "output_dir": "assets/sprites/boss",
       "filename_pattern": "boss_demagogue_phase2.png"
     },
+
     {
       "id": "boss_demagogue_phase3",
-      "prompt": "giant political caricature boss, enormous head, heavily shredded and smoking navy suit, red tie askew and frayed, toupee hatch fully open, both tiny arms outstretched dramatically holding the Statue of Liberty like a weapon, desperate final stand pose, comic book super-villain style, side-facing",
+      "prompt": "giant political caricature boss, side profile view facing left, face and chest on the LEFT side of the image, back of suit on the RIGHT side, enormous head, heavily shredded and smoking navy suit, red tie askew and frayed, toupee hatch fully open, both tiny arms outstretched to the LEFT holding the Statue of Liberty like a weapon, desperate final stand pose, comic book super-villain style",
       "size": [512, 768],
       "frames": 1,
       "seed": 6003,
       "output_dir": "assets/sprites/boss",
       "filename_pattern": "boss_demagogue_phase3.png"
     },
+
     {
       "id": "boss_demagogue_stagger",
-      "prompt": "giant political caricature boss staggering from heavy hit, enormous head tilted and recoiling, navy suit scorched and torn with fresh damage, red tie flying from impact force, toupee hatch rattled half-open, bright white plasma impact flash across body, hit reaction pose, comic book super-villain style",
+      "prompt": "giant political caricature boss, side profile view facing left, face and chest on the LEFT side of the image, back of suit on the RIGHT side, enormous head tilted and recoiling toward the RIGHT from impact, navy suit scorched and torn with fresh damage, red tie flying from impact force, toupee hatch rattled half-open, bright white plasma impact flash across body, hit reaction pose, comic book super-villain style",
       "size": [512, 768],
       "frames": 1,
       "seed": 6004,
       "output_dir": "assets/sprites/boss",
       "filename_pattern": "boss_demagogue_stagger.png"
     },
+
     {
       "id": "terrain_sky_bg",
       "prompt": "sci-fi military air battle sky background, orange and purple dusk horizon gradient, multiple distant smoke columns rising from ground battles below, fighter jet contrails crossing upper sky, dramatic war atmosphere, wide seamless horizontal strip",
@@ -435,6 +493,7 @@
       "output_dir": "assets/sprites/terrain",
       "filename_pattern": "sky_bg.png"
     },
+
     {
       "id": "terrain_mid_land",
       "prompt": "mid-distance land terrain parallax strip, rolling dark earth hills silhouette, suggestion of military base structures and radar dishes, sparse dead trees, alien organic growth beginning to creep across horizon, wide seamless horizontal band",
@@ -444,6 +503,7 @@
       "output_dir": "assets/sprites/terrain",
       "filename_pattern": "mid_land.png"
     },
+
     {
       "id": "terrain_mid_water",
       "prompt": "mid-distance ocean terrain parallax strip, calm ocean surface with dark reflective water, distant coastline silhouette, low warship and destroyer silhouettes on the horizon, wide seamless horizontal band",
@@ -453,6 +513,7 @@
       "output_dir": "assets/sprites/terrain",
       "filename_pattern": "mid_water.png"
     },
+
     {
       "id": "terrain_ground_land",
       "prompt": "ground level land terrain strip, dark earthy ground with rocky outcroppings and gravel, suggestion of cracked military road, alien bioluminescent organic growth creeping along the lower ground edge, wide seamless horizontal band",
@@ -462,6 +523,7 @@
       "output_dir": "assets/sprites/terrain",
       "filename_pattern": "ground_land.png"
     },
+
     {
       "id": "terrain_ground_water",
       "prompt": "ground level ocean surface terrain strip, dark deep blue-green water with small rolling wave crests, white foam highlights on wave tops, subtle reflective sheen on surface, wide seamless horizontal band",
@@ -471,51 +533,58 @@
       "output_dir": "assets/sprites/terrain",
       "filename_pattern": "ground_water.png"
     },
+
     {
       "id": "ui_hud_frame",
-      "prompt": "fighter jet cockpit HUD overlay frame, angled corner bracket elements in orange and dark gunmetal, edge guide lines along screen borders, targeting reticle suggestion in corners, transparent interior showing gameplay, wide 16:9 screen format UI graphic",
+      "prompt": "fighter jet cockpit HUD overlay frame, angled corner bracket elements in orange and dark gunmetal, edge guide lines along all four screen borders, targeting reticle suggestion in corners, transparent interior showing gameplay, wide 16:9 screen format UI graphic",
       "size": [1920, 1080],
       "frames": 1,
       "seed": 8001,
       "output_dir": "assets/sprites/ui",
       "filename_pattern": "hud_frame.png"
     },
+
     {
       "id": "ui_health_pip",
-      "prompt": "small square health life pip icon, glowing blue crystalline shield shape, sci-fi flat design with inner light, bold ink outline, UI indicator element",
+      "prompt": "small square health life pip icon, glowing blue crystalline shield shape, centered in frame, sci-fi flat design with inner light, bold ink outline, UI indicator element",
       "size": [32, 32],
       "frames": 1,
       "seed": 8002,
       "output_dir": "assets/sprites/ui",
       "filename_pattern": "health_pip.png"
     },
+
     {
       "id": "ui_shield_indicator",
-      "prompt": "horizontal shield recharge progress bar, sci-fi blue energy fill with hexagonal cell grid pattern, dark metallic border frame, glowing leading edge at fill level, UI game graphic",
+      "prompt": "horizontal shield recharge progress bar, fills from LEFT edge to RIGHT edge, sci-fi blue energy fill with hexagonal cell grid pattern, dark metallic border frame, glowing leading edge at fill level, UI game graphic",
       "size": [128, 24],
       "frames": 1,
       "seed": 8003,
       "output_dir": "assets/sprites/ui",
       "filename_pattern": "shield_bar.png"
     },
+
     {
       "id": "ui_missile_icon",
-      "prompt": "small missile counter icon, stylized air-to-air missile silhouette side view, orange warhead with white body, sci-fi military design, bold ink outline, UI game graphic",
+      "prompt": "small missile counter icon, stylized air-to-air missile silhouette, warhead nose on the RIGHT side of the image, exhaust nozzle on the LEFT side, horizontal orientation parallel to image bottom, orange warhead with white body, sci-fi military design, bold ink outline, UI game graphic",
       "size": [32, 16],
       "frames": 1,
       "seed": 8004,
+      "flip_horizontal": false,
       "output_dir": "assets/sprites/ui",
       "filename_pattern": "missile_icon.png"
     },
+
     {
       "id": "ui_boss_hp_bar",
-      "prompt": "wide boss health bar frame, sinister alien-corrupted UI aesthetic, dark cracked border with alien circuit vein patterns along edges, deep red energy fill with organic pulse texture, game HUD boss indicator graphic",
+      "prompt": "wide boss health bar frame, fills from LEFT edge to RIGHT edge, sinister alien-corrupted UI aesthetic, dark cracked border with alien circuit vein patterns along edges, deep red energy fill with organic pulse texture, game HUD boss indicator graphic",
       "size": [512, 32],
       "frames": 1,
       "seed": 8005,
       "output_dir": "assets/sprites/ui",
       "filename_pattern": "boss_hp_bar.png"
     },
+
     {
       "id": "screen_title_card",
       "prompt": "RAPTOR video game title screen full illustration, bold stylized title lettering with F-22 Raptor silhouette integrated into the R, alien energy crackling around letters, dramatic dark background with lightning and deep space glow, cinematic wide format",
@@ -525,6 +594,7 @@
       "output_dir": "assets/screens",
       "filename_pattern": "title_card.png"
     },
+
     {
       "id": "screen_game_over",
       "prompt": "game over screen full illustration, smoking crashed F-22 Raptor wreckage resting on alien-corrupted ground, bioluminescent alien tendrils consuming the wreck, ominous dark red and green atmosphere, distant alien signal towers visible on horizon, cinematic wide format",
@@ -534,6 +604,7 @@
       "output_dir": "assets/screens",
       "filename_pattern": "game_over.png"
     },
+
     {
       "id": "screen_win_good_ending",
       "prompt": "victory screen full illustration, F-22 Raptor flying upward triumphant in clear blue sky, Statue of Liberty standing free and radiating golden light in mid-ground, defeated alien ship debris falling in background, celebratory warm light atmosphere, cinematic wide format",
@@ -543,6 +614,7 @@
       "output_dir": "assets/screens",
       "filename_pattern": "win_good_ending.png"
     },
+
     {
       "id": "screen_win_bad_ending",
       "prompt": "pyrrhic victory screen full illustration, F-22 Raptor flying through still-corrupted purple-tainted sky, alien broadcast signal tower still partially active in background, atmosphere visibly damaged with alien haze, hollow victory mood, cinematic wide format",
@@ -552,5 +624,6 @@
       "output_dir": "assets/screens",
       "filename_pattern": "win_bad_ending.png"
     }
+
   ]
 }

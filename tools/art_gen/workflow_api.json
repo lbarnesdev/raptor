@@ -1,69 +1,126 @@
 {
-  "4": {
-    "class_type": "CheckpointLoaderSimple",
+  "10": {
     "inputs": {
       "ckpt_name": "dreamshaper_8.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Load Checkpoint"
     }
   },
-  "10": {
-    "class_type": "LoraLoader",
+  "11": {
     "inputs": {
-      "model": ["4", 0],
-      "clip": ["4", 1],
-      "lora_name": "comicbook_v2.safetensors",
+      "lora_name": "Sc-fi__futurism_vehicles.safetensors",
       "strength_model": 0.85,
-      "strength_clip": 0.85
+      "strength_clip": 0.85,
+      "model": [
+        "10",
+        0
+      ],
+      "clip": [
+        "10",
+        1
+      ]
+    },
+    "class_type": "LoraLoader",
+    "_meta": {
+      "title": "Load LoRA (Model and CLIP)"
     }
   },
-  "6": {
-    "class_type": "CLIPTextEncode",
+  "12": {
     "inputs": {
       "text": "POSITIVE PROMPT HERE",
-      "clip": ["10", 1]
+      "clip": [
+        "11",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "Positive Prompt"
     }
   },
-  "7": {
-    "class_type": "CLIPTextEncode",
+  "13": {
     "inputs": {
       "text": "NEGATIVE PROMPT HERE",
-      "clip": ["10", 1]
+      "clip": [
+        "11",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "Negative Prompt"
     }
   },
-  "5": {
-    "class_type": "EmptyLatentImage",
+  "14": {
     "inputs": {
       "width": 512,
       "height": 512,
       "batch_size": 1
+    },
+    "class_type": "EmptyLatentImage",
+    "_meta": {
+      "title": "Empty Latent Image"
     }
   },
-  "3": {
-    "class_type": "KSampler",
+  "16": {
     "inputs": {
-      "model": ["10", 0],
-      "positive": ["6", 0],
-      "negative": ["7", 0],
-      "latent_image": ["5", 0],
-      "seed": 42,
+      "seed": 422594141758196,
       "steps": 25,
-      "cfg": 7.0,
+      "cfg": 7,
       "sampler_name": "dpmpp_2m",
       "scheduler": "karras",
-      "denoise": 1.0
+      "denoise": 1,
+      "model": [
+        "11",
+        0
+      ],
+      "positive": [
+        "12",
+        0
+      ],
+      "negative": [
+        "13",
+        0
+      ],
+      "latent_image": [
+        "14",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
     }
   },
-  "8": {
+  "17": {
+    "inputs": {
+      "samples": [
+        "16",
+        0
+      ],
+      "vae": [
+        "10",
+        2
+      ]
+    },
     "class_type": "VAEDecode",
-    "inputs": {
-      "samples": ["3", 0],
-      "vae": ["4", 2]
+    "_meta": {
+      "title": "VAE Decode"
     }
   },
-  "9": {
-    "class_type": "SaveImage",
+  "18": {
     "inputs": {
-      "images": ["8", 0],
-      "filename_prefix": "raptor_"
+      "filename_prefix": "raptor_",
+      "images": [
+        "17",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Image"
     }
   }
 }
