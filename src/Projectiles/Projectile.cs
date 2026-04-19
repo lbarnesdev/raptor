@@ -123,8 +123,10 @@ public abstract partial class Projectile : Area2D
     /// <summary>
     /// Returns this projectile to <see cref="ProjectilePool"/>.
     /// Safe to call multiple times in one frame — only the first call acts.
+    /// Public so external hit detectors (e.g. <see cref="Raptor.Boss.WeakPoint"/>)
+    /// can trigger pool return without bypassing the <c>_returned</c> guard.
     /// </summary>
-    protected void ReturnToPool()
+    public void ReturnToPool()
     {
         if (_returned) return;
         _returned = true;
