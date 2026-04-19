@@ -1,0 +1,132 @@
+[gd_scene load_steps=7 format=3 uid="uid://raptor0boss01"]
+
+; ── External resources ────────────────────────────────────────────────────────
+[ext_resource type="Script" path="res://src/Boss/Boss.cs"            id="1_boss"]
+[ext_resource type="Script" path="res://src/Boss/WeakPoint.cs"       id="2_weakpoint"]
+[ext_resource type="Script" path="res://src/Boss/AlienPassenger.cs"  id="3_alien"]
+
+; ── Collision shapes (one per WeakPoint) ─────────────────────────────────────
+[sub_resource type="RectangleShape2D" id="1_wp1shape"]
+size = Vector2(48, 48)
+
+[sub_resource type="RectangleShape2D" id="2_wp2shape"]
+size = Vector2(48, 48)
+
+[sub_resource type="RectangleShape2D" id="3_wp3shape"]
+size = Vector2(48, 48)
+
+; ── Scene tree ────────────────────────────────────────────────────────────────
+;
+; Boss root (Node2D) — Boss.cs handles all phase logic.
+; All movement is scripted via Tween / AnimationPlayer (ADR-001).
+;
+; Collision layers:
+;   WeakPoint Area2Ds — layer 7 (BossWeakPoint)  = 2^6 = 64
+;                        mask 5 (PlayerProjectile) = 2^4 = 16
+;
+; All WeakPoint nodes start with monitoring=false and visible=false.
+; Boss.cs calls WeakPoint.SetActive(true) for the active phase only.
+;
+; Placeholder visuals (replace with AnimatedSprite2D in Slice 11):
+;   BodySprite     — large grey rectangle (200 × 360 px)
+;   WeakPointSprite — small gold square (40 × 40 px), shown when active
+
+[node name="Boss" type="Node2D"]
+script = ExtResource("1_boss")
+
+; ── Main body placeholder ─────────────────────────────────────────────────────
+; Replace with AnimatedSprite2D + Demagogue sprite sheet in Slice 11.
+[node name="BodySprite" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-100, -180, 100, -180, 100, 180, -100, 180)
+color = Color(0.55, 0.55, 0.6, 1)
+
+; ── Phase 1 — Tiny Hand ───────────────────────────────────────────────────────
+; Hand cycles open (3 s, weak point exposed) / closed (2 s, invulnerable).
+; Phase1Controller (Slice 6) drives the animation cycle.
+[node name="TinyHandNode" type="Node2D" parent="."]
+position = Vector2(80, 50)
+
+[node name="WeakPoint_P1" type="Area2D" parent="TinyHandNode"]
+collision_layer = 64
+collision_mask = 16
+monitoring = false
+visible = false
+script = ExtResource("2_weakpoint")
+PhaseIndex = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TinyHandNode/WeakPoint_P1"]
+shape = SubResource("1_wp1shape")
+
+; Placeholder: pulsing gold square visible when Phase 1 is active.
+; Replace with Constitution sprite wrapped in alien tentacle (Slice 11).
+[node name="WeakPointSprite" type="Polygon2D" parent="TinyHandNode/WeakPoint_P1"]
+polygon = PackedVector2Array(-20, -20, 20, -20, 20, 20, -20, 20)
+color = Color(1, 0.85, 0, 0.9)
+
+; ── Phase 2 — Toupee Hatch ────────────────────────────────────────────────────
+; Hatch cycles open (4 s) / closed (3 s). Fox News logo is the weak point.
+; Phase2Controller (Slice 6) drives the cycle + bonus wave spawning.
+[node name="ToupeeNode" type="Node2D" parent="."]
+position = Vector2(0, -160)
+
+[node name="WeakPoint_P2" type="Area2D" parent="ToupeeNode"]
+collision_layer = 64
+collision_mask = 16
+monitoring = false
+visible = false
+script = ExtResource("2_weakpoint")
+PhaseIndex = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ToupeeNode/WeakPoint_P2"]
+shape = SubResource("2_wp2shape")
+
+[node name="WeakPointSprite" type="Polygon2D" parent="ToupeeNode/WeakPoint_P2"]
+polygon = PackedVector2Array(-20, -20, 20, -20, 20, 20, -20, 20)
+color = Color(1, 0.2, 0.2, 0.9)
+
+; ── Phase 3 — Statue of Liberty ───────────────────────────────────────────────
+; Boss reaches right and grabs the statue; tentacle weak point wraps the head.
+; StatueNode is hidden until Phase 3 (Boss.cs sets Visible=true on phase entry).
+; Phase3Controller (Slice 6) drives the swing arc + shuriken fling.
+[node name="StatueNode" type="Node2D" parent="."]
+position = Vector2(-80, 20)
+visible = false
+
+[node name="WeakPoint_P3" type="Area2D" parent="StatueNode"]
+collision_layer = 64
+collision_mask = 16
+monitoring = false
+visible = false
+script = ExtResource("2_weakpoint")
+PhaseIndex = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StatueNode/WeakPoint_P3"]
+shape = SubResource("3_wp3shape")
+
+[node name="WeakPointSprite" type="Polygon2D" parent="StatueNode/WeakPoint_P3"]
+polygon = PackedVector2Array(-20, -20, 20, -20, 20, 20, -20, 20)
+color = Color(0.4, 0.9, 0.4, 0.9)
+
+; ── Alien Passenger ───────────────────────────────────────────────────────────
+; Always visible; subtly animates (idle blinks/twitches).
+; Boss.cs calls AlienPassenger.Detach() on Phase 3 death to start flee sequence.
+; HitArea (Area2D, layer 9) enabled only during flee (Slice 6).
+[node name="AlienPassenger" type="Node2D" parent="."]
+position = Vector2(10, -70)
+script = ExtResource("3_alien")
+
+; Placeholder: small purple octagon. Replace with AnimatedSprite2D in Slice 11.
+[node name="AlienSprite" type="Polygon2D" parent="AlienPassenger"]
+polygon = PackedVector2Array(0, -30, 21, -21, 30, 0, 21, 21, 0, 30, -21, 21, -30, 0, -21, -21)
+color = Color(0.6, 0.2, 0.8, 1)
+
+; ── Phase Controllers ─────────────────────────────────────────────────────────
+; Empty container — Phase1/2/3Controller nodes added in Slice 6 (TICKET-601–603).
+; Boss.cs uses GetNodeOrNull so missing controllers are safe in Slice 5.
+[node name="PhaseControllers" type="Node2D" parent="."]
+
+[node name="Phase1Controller" type="Node" parent="PhaseControllers"]
+
+[node name="Phase2Controller" type="Node" parent="PhaseControllers"]
+
+[node name="Phase3Controller" type="Node" parent="PhaseControllers"]
