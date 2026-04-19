@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://ct10vlf38ik33"]
+
+; ── External resources ────────────────────────────────────────────────────────
+[ext_resource type="Script" path="res://src/Enemies/BaseEnemy.cs" id="1_enemy"]
+
+; ── Collision shape ───────────────────────────────────────────────────────────
+[sub_resource type="RectangleShape2D" id="1_enemyshape"]
+size = Vector2(48, 32)
+
+; ── Scene tree ────────────────────────────────────────────────────────────────
+; Collision layers (project.godot layer names):
+;   BasicEnemy — layer 4 (Enemy) = 2^3 = 8
+;                mask 0  (stationary, no physics response needed)
+;
+; PlasmaBolt masks against layer 4 (value 8), so its Area2D.BodyEntered fires
+; when a bolt overlaps this node.
+
+[node name="BasicEnemy" type="CharacterBody2D"]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("1_enemy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("1_enemyshape")
+
+; Placeholder visual — orange wedge pointing left (enemy approaching player).
+; Replace with AnimatedSprite2D when art is ready (Slice 6).
+[node name="PlaceholderShape" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-22, 0, 22, -14, 8, 0, 22, 14)
+color = Color(1, 0.25, 0.1, 1)

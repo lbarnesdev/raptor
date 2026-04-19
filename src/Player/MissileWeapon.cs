@@ -53,7 +53,7 @@ namespace Raptor.Player;
 /// selection to <see cref="MissileSystem"/>, and spawns homing
 /// <see cref="Missile"/> instances from the projectile pool.
 /// </summary>
-public partial class MissileWeapon : Node
+public partial class MissileWeapon : Node2D
 {
     // ── Pure-logic system ─────────────────────────────────────────────────────
 

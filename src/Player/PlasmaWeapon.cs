@@ -33,7 +33,7 @@ namespace Raptor.Player;
 /// Manages the player's primary plasma bolt weapon: input polling, fire-rate
 /// gating, pool acquisition, and reparenting to <c>ProjectileContainer</c>.
 /// </summary>
-public partial class PlasmaWeapon : Node
+public partial class PlasmaWeapon : Node2D
 {
     // ── Exported tunables ────────────────────────────────────────────────────
 

@@ -58,7 +58,7 @@ shape = SubResource("2_shieldshape")
 [node name="ShieldSprite" type="Sprite2D" parent="ShieldController/ShieldArea"]
 
 ; ── Plasma weapon ──────────────────────────────────────────────────────────────
-[node name="PlasmaWeapon" type="Node" parent="."]
+[node name="PlasmaWeapon" type="Node2D" parent="."]
 script = ExtResource("3_plasma")
 
 ; MuzzlePoint sits at the nose of the placeholder shape (x=35 → right edge)
@@ -66,7 +66,7 @@ script = ExtResource("3_plasma")
 position = Vector2(35, 0)
 
 ; ── Missile weapon ─────────────────────────────────────────────────────────────
-[node name="MissileWeapon" type="Node" parent="."]
+[node name="MissileWeapon" type="Node2D" parent="."]
 script = ExtResource("4_missile")
 
 [node name="MuzzlePoint" type="Marker2D" parent="MissileWeapon"]

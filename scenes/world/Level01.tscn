@@ -1,16 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://raptor0level001"]
+[gd_scene load_steps=7 format=3 uid="uid://raptor0level001"]
 
 ; ── External resources ────────────────────────────────────────────────────────
 [ext_resource type="Script" path="res://src/World/ScrollCamera.cs" id="1_scrollcam"]
 [ext_resource type="PackedScene" uid="uid://raptor0player01" path="res://scenes/player/Player.tscn" id="2_player"]
+[ext_resource type="Script" path="res://src/Projectiles/ProjectilePool.cs" id="3_pool"]
+[ext_resource type="PackedScene" uid="uid://raptor0bolt01" path="res://scenes/projectiles/PlasmaBolt.tscn" id="4_plasmabolt"]
+[ext_resource type="Script" path="res://src/UI/ScoreHud.cs" id="5_scorehud"]
+[ext_resource type="PackedScene" uid="uid://raptor0enemy01" path="res://scenes/enemies/BasicEnemy.tscn" id="6_basicenemy"]
 
 ; ── Scene tree ────────────────────────────────────────────────────────────────
-; Slice 1 — minimal: camera + player in empty space.
+; Slice 1 — camera + player.
+; Slice 2 — ProjectilePool + PlasmaBolt wired.
+; Slice 3 — one hard-placed enemy + score HUD.
 ;
-; Full Level01 hierarchy (arch doc Section 3.1) will be assembled in Slice 4
-; when ParallaxBackground, TileMapLayer, EnemyContainer, Boss, and Checkpoints
-; are all needed. For now only the nodes that C# scripts hard-GetNode at startup
-; are included.
+; Full Level01 hierarchy (arch doc Section 3.1) assembled in Slice 4.
 ;
 ; Required node paths (referenced by GetNode in C# _Ready() methods):
 ;   /root/Level01/ScrollCamera          ← Player.cs
@@ -32,11 +35,36 @@ script = ExtResource("1_scrollcam")
 [node name="Player" parent="Entities" instance=ExtResource("2_player")]
 position = Vector2(300, 540)
 
+; ── Enemy (Slice 3 hard-placed) ────────────────────────────────────────────────
+; One BasicEnemy sitting mid-screen to the right.
+; Replace with LevelDirector-spawned waves in Slice 4.
+[node name="BasicEnemy" parent="Entities" instance=ExtResource("6_basicenemy")]
+position = Vector2(1400, 540)
+
 ; ── Projectile container ────────────────────────────────────────────────────────
 ; Required by PlasmaWeapon._Ready() and MissileWeapon._Ready() at scene load.
 ; All live projectiles are reparented here at spawn (ADR-003).
 [node name="ProjectileContainer" type="Node2D" parent="."]
 
 ; ── Effects container ───────────────────────────────────────────────────────────
-; Explosion VFX, SporeCloud instances. Empty in Slice 1.
+; Explosion VFX, SporeCloud instances. Empty until Slice 4.
 [node name="EffectsContainer" type="Node2D" parent="."]
+
+; ── Score HUD ──────────────────────────────────────────────────────────────────
+; CanvasLayer renders at a fixed screen position regardless of camera scroll.
+; ScoreLabel (Label + ScoreHud.cs) subscribes to EventBus.ScoreChanged.
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="ScoreLabel" type="Label" parent="HUD"]
+offset_left = 20.0
+offset_top = 16.0
+script = ExtResource("5_scorehud")
+
+; ── Projectile pool ─────────────────────────────────────────────────────────────
+; NOT an autoload — lifetime is scoped to the level scene.
+; ProjectileScenes array is indexed by ProjectileType enum value:
+;   [0] PlasmaBolt  ← wired (Slice 2)
+;   [1..7]          ← assigned in later slices; pool logs warnings for nulls
+[node name="ProjectilePool" type="Node" parent="."]
+script = ExtResource("3_pool")
+ProjectileScenes = Array[PackedScene]([ExtResource("4_plasmabolt")])

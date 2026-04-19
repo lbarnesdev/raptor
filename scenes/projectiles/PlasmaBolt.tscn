@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://bs3dckcbfscyy"]
+
+; ── External resources ────────────────────────────────────────────────────────
+[ext_resource type="Script" path="res://src/Projectiles/PlasmaBolt.cs" id="1_bolt"]
+
+; ── Collision shape ───────────────────────────────────────────────────────────
+; Elongated rectangle matching the visual — 16 px wide, 4 px tall.
+[sub_resource type="RectangleShape2D" id="1_boltshape"]
+size = Vector2(16, 4)
+
+; ── Scene tree ────────────────────────────────────────────────────────────────
+; Collision layers (project.godot layer names):
+;   PlasmaBolt — layer 5 (PlayerProjectile) = 2^4 = 16
+;                mask:  Enemy(8) + BossWeakPoint(64) = 72
+
+[node name="PlasmaBolt" type="Area2D"]
+collision_layer = 16
+collision_mask = 72
+script = ExtResource("1_bolt")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("1_boltshape")
+
+; Placeholder visual — cyan rectangle bolt.
+; Replace with a sprite sheet when art is ready (Slice 6).
+[node name="PlaceholderShape" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-8, -2, 8, -2, 8, 2, -8, 2)
+color = Color(0, 0.9, 1, 1)
