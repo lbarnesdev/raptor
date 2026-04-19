@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://raptor0level001"]
+[gd_scene load_steps=9 format=3 uid="uid://raptor0level001"]
 
 ; ── External resources ────────────────────────────────────────────────────────
 [ext_resource type="Script" path="res://src/World/ScrollCamera.cs" id="1_scrollcam"]
@@ -8,12 +8,14 @@
 [ext_resource type="Script" path="res://src/UI/ScoreHud.cs" id="5_scorehud"]
 [ext_resource type="PackedScene" uid="uid://raptor0enemy01" path="res://scenes/enemies/BasicEnemy.tscn" id="6_basicenemy"]
 [ext_resource type="Script" path="res://src/World/LevelDirector.cs" id="7_leveldirector"]
+[ext_resource type="PackedScene" uid="uid://raptor0boss01" path="res://scenes/boss/Boss.tscn" id="8_boss"]
 
 ; ── Scene tree ────────────────────────────────────────────────────────────────
 ; Slice 1 — camera + player.
 ; Slice 2 — ProjectilePool + PlasmaBolt wired.
 ; Slice 3 — one hard-placed enemy + score HUD.
 ; Slice 4 — scrolling camera, LevelDirector + EnemyContainer, wave JSON.
+; Slice 5 — Boss.tscn wired to LevelDirector; spawns at t=162s.
 ;
 ; Required node paths (referenced by GetNode in C# _Ready() methods):
 ;   /root/Level01/ScrollCamera          ← Player.cs
@@ -76,3 +78,4 @@ ProjectileScenes = Array[PackedScene]([ExtResource("4_plasmabolt")])
 [node name="LevelDirector" type="Node" parent="."]
 script = ExtResource("7_leveldirector")
 BasicEnemyScene = ExtResource("6_basicenemy")
+BossScene = ExtResource("8_boss")

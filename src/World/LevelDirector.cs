@@ -10,12 +10,13 @@
 // Data file:
 //   res://data/level_01_waves.json — loaded once in _Ready via FileAccess.
 //
-// Supported TimelineEventType values (Slice 4):
+// Supported TimelineEventType values (Slices 4–5):
 //   SpawnWave          — instantiates BasicEnemyScene N times in a formation
 //   StopScroll         — sets ScrollCamera.IsStopped = true
 //   DespawnAllEnemies  — QueueFrees every node in the "enemies" group
+//   SpawnBoss          — instantiates BossScene, positions it, calls StartBoss()
 //
-// Remaining types (CrossfadeMusic, SpawnBoss, RegisterCheckpoint) are
+// Remaining types (CrossfadeMusic, RegisterCheckpoint) are
 // recognised but no-op'd with a warning until implemented in later slices.
 //
 // Formations (SpawnWave "formation" param):
@@ -24,6 +25,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 using Godot;
+using Raptor.Boss;
 using Raptor.Core;
 using Raptor.Logic;
 
@@ -43,6 +45,12 @@ public partial class LevelDirector : Node
     /// Assign <c>scenes/enemies/BasicEnemy.tscn</c> in the Inspector.
     /// </summary>
     [Export] public PackedScene BasicEnemyScene { get; set; } = null!;
+
+    /// <summary>
+    /// Scene to instantiate when the <c>SpawnBoss</c> timeline event fires at t=162s.
+    /// Assign <c>scenes/boss/Boss.tscn</c> in the Inspector.
+    /// </summary>
+    [Export] public PackedScene BossScene { get; set; } = null!;
 
     // ── Cached node references ────────────────────────────────────────────────
 
@@ -105,9 +113,12 @@ public partial class LevelDirector : Node
                     n.QueueFree();
                 break;
 
+            case TimelineEventType.SpawnBoss:
+                SpawnBoss();
+                break;
+
             // ── Future slices ─────────────────────────────────────────────────
             case TimelineEventType.CrossfadeMusic:
-            case TimelineEventType.SpawnBoss:
             case TimelineEventType.RegisterCheckpoint:
                 GD.Print($"LevelDirector: {ev.Type} not yet implemented (future slice).");
                 break;
@@ -140,6 +151,33 @@ public partial class LevelDirector : Node
             _enemyContainer.AddChild(enemy);
             enemy.GlobalPosition = pos;
         }
+    }
+
+    // ── Boss spawning ─────────────────────────────────────────────────────────
+
+    private void SpawnBoss()
+    {
+        if (BossScene is null)
+        {
+            GD.PushWarning("LevelDirector: BossScene not assigned in Inspector.");
+            return;
+        }
+
+        var boss = BossScene.Instantiate<Node2D>();
+        _enemyContainer.AddChild(boss);
+
+        // Place the boss in the right-centre of the current camera view.
+        // Camera Y stays constant (ScrollCamera only moves X), so
+        // _camera.GlobalPosition.Y is always the screen vertical midpoint.
+        boss.GlobalPosition = new Vector2(
+            _camera.GlobalPosition.X + _viewHalfWidth * 0.6f,
+            _camera.GlobalPosition.Y);
+
+        // Defer StartBoss() by one frame so Boss._Ready() has run and
+        // Boss.Instance is valid before the phase activation begins.
+        boss.CallDeferred(Boss.MethodName.StartBoss);
+
+        GD.Print($"LevelDirector: Boss spawned at {boss.GlobalPosition}.");
     }
 
     // ── Formation builders ────────────────────────────────────────────────────
