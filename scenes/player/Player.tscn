@@ -1,0 +1,77 @@
+[gd_scene load_steps=7 format=3 uid="uid://raptor0player01"]
+
+; ── External scripts ──────────────────────────────────────────────────────────
+[ext_resource type="Script" path="res://src/Player/Player.cs" id="1_player"]
+[ext_resource type="Script" path="res://src/Player/ShieldController.cs" id="2_shield"]
+[ext_resource type="Script" path="res://src/Player/PlasmaWeapon.cs" id="3_plasma"]
+[ext_resource type="Script" path="res://src/Player/MissileWeapon.cs" id="4_missile"]
+
+; ── Collision shapes ──────────────────────────────────────────────────────────
+; Body: tight rectangle around the F-22 fuselage (80×32 px at 128×64 sprite size)
+[sub_resource type="RectangleShape2D" id="1_bodyshape"]
+size = Vector2(80, 32)
+
+; Shield: circle slightly larger than the ship hull
+[sub_resource type="CircleShape2D" id="2_shieldshape"]
+radius = 50.0
+
+; ── Scene tree ────────────────────────────────────────────────────────────────
+; See arch doc Section 3.2 for the full Player.tscn hierarchy.
+;
+; Collision layers (project.godot layer names):
+;   Player body  — layer 2 (bit 1 = 2),  mask: World(1) + EnemyProjectile(32) + Hazard(128) = 161
+;   ShieldArea   — layer 3 (bit 2 = 4),  mask: EnemyProjectile(32) = 32
+
+[node name="Player" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 161
+script = ExtResource("1_player")
+
+; ── Body collision ─────────────────────────────────────────────────────────────
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("1_bodyshape")
+
+; ── Sprite (placeholder) ───────────────────────────────────────────────────────
+; AnimatedSprite2D with no SpriteFrames assigned shows nothing.
+; Replace with player_idle.png / player_thrust.png when art is ready (Slice 6).
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+
+; ── Slice 1 placeholder visual ────────────────────────────────────────────────
+; Simple arrow polygon so the player is visible without any sprite assets.
+; Delete this node when AnimatedSprite2D has real frames (Slice 6).
+[node name="PlaceholderShape" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-35, -12, 10, -12, 35, 0, 10, 12, -35, 12, -22, 0)
+color = Color(0.2, 0.6, 1, 1)
+
+; ── Shield ─────────────────────────────────────────────────────────────────────
+[node name="ShieldController" type="Node" parent="."]
+script = ExtResource("2_shield")
+
+[node name="ShieldArea" type="Area2D" parent="ShieldController"]
+collision_layer = 4
+collision_mask = 32
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ShieldController/ShieldArea"]
+shape = SubResource("2_shieldshape")
+
+; ShieldSprite has no texture in Slice 1 — shield is invisible until art lands.
+[node name="ShieldSprite" type="Sprite2D" parent="ShieldController/ShieldArea"]
+
+; ── Plasma weapon ──────────────────────────────────────────────────────────────
+[node name="PlasmaWeapon" type="Node" parent="."]
+script = ExtResource("3_plasma")
+
+; MuzzlePoint sits at the nose of the placeholder shape (x=35 → right edge)
+[node name="MuzzlePoint" type="Marker2D" parent="PlasmaWeapon"]
+position = Vector2(35, 0)
+
+; ── Missile weapon ─────────────────────────────────────────────────────────────
+[node name="MissileWeapon" type="Node" parent="."]
+script = ExtResource("4_missile")
+
+[node name="MuzzlePoint" type="Marker2D" parent="MissileWeapon"]
+position = Vector2(35, 0)
+
+; ── Hurt flash ─────────────────────────────────────────────────────────────────
+; AnimationPlayer with no animations — add hurt_flash animation in Slice 4.
+[node name="HurtFlash" type="AnimationPlayer" parent="."]

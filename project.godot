@@ -15,6 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="RAPTOR"
+run/main_scene="res://scenes/world/Level01.tscn"
 config/features=PackedStringArray("4.6", "C#", "Forward Plus")
 
 [autoload]
@@ -99,3 +100,4 @@ special={
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
+environment/defaults/default_clear_color=Color(0.05, 0.05, 0.12, 1)

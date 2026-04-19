@@ -52,11 +52,6 @@
     <!-- Required for `dotnet test` to discover and run xUnit tests -->
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
 
-    <!-- Optional but recommended: human-readable output in CI logs -->
-    <PackageReference Include="xunit.console" Version="2.9.0">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
   </ItemGroup>
 
 </Project>

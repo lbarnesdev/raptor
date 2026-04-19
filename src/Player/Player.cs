@@ -24,9 +24,10 @@
 //   move_left, move_right, move_up, move_down
 //
 // Boundaries:
-//   • Vertical: clamped in _PhysicsProcess against camera centre ± half-height.
-//   • Left:     enforced by ScrollCamera.cs (pushes the player right if lagging).
-//   • Right:    enforced here — player cannot exceed the right screen edge.
+//   • Vertical:    clamped against camera centre ± half-height.
+//   • Left/Right:  clamped against the camera's visible edges ± EdgeMargin.
+//                  When ScrollCamera scrolls (Slice 4) the left wall moves with
+//                  the camera, naturally pushing the player forward.
 //
 // Stub methods Die() and Respawn() are intentionally empty.  They will be
 // fleshed out in the ShieldController and CheckpointManager tickets respectively.
@@ -103,14 +104,19 @@ public partial class Player : CharacterBody2D
                 camY - halfH + EdgeMargin,   // top boundary
                 camY + halfH - EdgeMargin)); // bottom boundary
 
-        // ── Right boundary ────────────────────────────────────────────────
-        // The player may not travel past the right screen edge.
-        // The left boundary is enforced by ScrollCamera.cs, which pushes
-        // the player right when the camera scrolls past them (ADR-002).
-        float rightEdge = _camera.GlobalPosition.X + viewport.Size.X / 2f - EdgeMargin;
+        // ── Horizontal boundaries ─────────────────────────────────────────
+        // Right: player cannot exceed the right screen edge.
+        // Left:  player cannot go behind the left screen edge.
+        //        When ScrollCamera begins scrolling (Slice 4) this will
+        //        automatically act as a moving wall that pushes the player
+        //        forward — no code change required here.
+        float camX     = _camera.GlobalPosition.X;
+        float halfW    = viewport.Size.X / 2f;
+        float leftEdge  = camX - halfW + EdgeMargin;
+        float rightEdge = camX + halfW  - EdgeMargin;
 
         GlobalPosition = new Vector2(
-            Mathf.Min(GlobalPosition.X, rightEdge),
+            Mathf.Clamp(GlobalPosition.X, leftEdge, rightEdge),
             GlobalPosition.Y);
     }
 

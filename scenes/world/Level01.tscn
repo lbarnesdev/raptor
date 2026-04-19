@@ -1,0 +1,42 @@
+[gd_scene load_steps=3 format=3 uid="uid://raptor0level001"]
+
+; ── External resources ────────────────────────────────────────────────────────
+[ext_resource type="Script" path="res://src/World/ScrollCamera.cs" id="1_scrollcam"]
+[ext_resource type="PackedScene" uid="uid://raptor0player01" path="res://scenes/player/Player.tscn" id="2_player"]
+
+; ── Scene tree ────────────────────────────────────────────────────────────────
+; Slice 1 — minimal: camera + player in empty space.
+;
+; Full Level01 hierarchy (arch doc Section 3.1) will be assembled in Slice 4
+; when ParallaxBackground, TileMapLayer, EnemyContainer, Boss, and Checkpoints
+; are all needed. For now only the nodes that C# scripts hard-GetNode at startup
+; are included.
+;
+; Required node paths (referenced by GetNode in C# _Ready() methods):
+;   /root/Level01/ScrollCamera          ← Player.cs
+;   /root/Level01/ProjectileContainer   ← PlasmaWeapon.cs, MissileWeapon.cs
+;   /root/Level01/Entities/Player       ← GameManager.cs (TODO comment)
+
+[node name="Level01" type="Node2D"]
+
+; ── Camera ─────────────────────────────────────────────────────────────────────
+; Centred at screen midpoint. ScrollCamera.cs calls MakeCurrent() in _Ready().
+; Scroll behaviour enabled in Slice 4.
+[node name="ScrollCamera" type="Camera2D" parent="."]
+position = Vector2(960, 540)
+script = ExtResource("1_scrollcam")
+
+; ── Player ─────────────────────────────────────────────────────────────────────
+[node name="Entities" type="Node2D" parent="."]
+
+[node name="Player" parent="Entities" instance=ExtResource("2_player")]
+position = Vector2(300, 540)
+
+; ── Projectile container ────────────────────────────────────────────────────────
+; Required by PlasmaWeapon._Ready() and MissileWeapon._Ready() at scene load.
+; All live projectiles are reparented here at spawn (ADR-003).
+[node name="ProjectileContainer" type="Node2D" parent="."]
+
+; ── Effects container ───────────────────────────────────────────────────────────
+; Explosion VFX, SporeCloud instances. Empty in Slice 1.
+[node name="EffectsContainer" type="Node2D" parent="."]
