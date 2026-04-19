@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://raptor0level001"]
+[gd_scene load_steps=8 format=3 uid="uid://raptor0level001"]
 
 ; ── External resources ────────────────────────────────────────────────────────
 [ext_resource type="Script" path="res://src/World/ScrollCamera.cs" id="1_scrollcam"]
@@ -7,24 +7,25 @@
 [ext_resource type="PackedScene" uid="uid://raptor0bolt01" path="res://scenes/projectiles/PlasmaBolt.tscn" id="4_plasmabolt"]
 [ext_resource type="Script" path="res://src/UI/ScoreHud.cs" id="5_scorehud"]
 [ext_resource type="PackedScene" uid="uid://raptor0enemy01" path="res://scenes/enemies/BasicEnemy.tscn" id="6_basicenemy"]
+[ext_resource type="Script" path="res://src/World/LevelDirector.cs" id="7_leveldirector"]
 
 ; ── Scene tree ────────────────────────────────────────────────────────────────
 ; Slice 1 — camera + player.
 ; Slice 2 — ProjectilePool + PlasmaBolt wired.
 ; Slice 3 — one hard-placed enemy + score HUD.
-;
-; Full Level01 hierarchy (arch doc Section 3.1) assembled in Slice 4.
+; Slice 4 — scrolling camera, LevelDirector + EnemyContainer, wave JSON.
 ;
 ; Required node paths (referenced by GetNode in C# _Ready() methods):
 ;   /root/Level01/ScrollCamera          ← Player.cs
 ;   /root/Level01/ProjectileContainer   ← PlasmaWeapon.cs, MissileWeapon.cs
+;   /root/Level01/EnemyContainer        ← LevelDirector.cs
 ;   /root/Level01/Entities/Player       ← GameManager.cs (TODO comment)
 
 [node name="Level01" type="Node2D"]
 
 ; ── Camera ─────────────────────────────────────────────────────────────────────
 ; Centred at screen midpoint. ScrollCamera.cs calls MakeCurrent() in _Ready().
-; Scroll behaviour enabled in Slice 4.
+; Scrolls rightward at 120 px/s; stops when LevelDirector fires StopScroll at t=160s.
 [node name="ScrollCamera" type="Camera2D" parent="."]
 position = Vector2(960, 540)
 script = ExtResource("1_scrollcam")
@@ -35,11 +36,11 @@ script = ExtResource("1_scrollcam")
 [node name="Player" parent="Entities" instance=ExtResource("2_player")]
 position = Vector2(300, 540)
 
-; ── Enemy (Slice 3 hard-placed) ────────────────────────────────────────────────
-; One BasicEnemy sitting mid-screen to the right.
-; Replace with LevelDirector-spawned waves in Slice 4.
-[node name="BasicEnemy" parent="Entities" instance=ExtResource("6_basicenemy")]
-position = Vector2(1400, 540)
+; ── Enemy container ─────────────────────────────────────────────────────────────
+; LevelDirector.cs adds dynamically-spawned enemies here (ADR-004).
+; Keeping enemies in their own container makes DespawnAllEnemies fast: iterate
+; children rather than searching a mixed-content Entities node.
+[node name="EnemyContainer" type="Node2D" parent="."]
 
 ; ── Projectile container ────────────────────────────────────────────────────────
 ; Required by PlasmaWeapon._Ready() and MissileWeapon._Ready() at scene load.
@@ -47,7 +48,7 @@ position = Vector2(1400, 540)
 [node name="ProjectileContainer" type="Node2D" parent="."]
 
 ; ── Effects container ───────────────────────────────────────────────────────────
-; Explosion VFX, SporeCloud instances. Empty until Slice 4.
+; Explosion VFX, SporeCloud instances. Empty until Slice 5.
 [node name="EffectsContainer" type="Node2D" parent="."]
 
 ; ── Score HUD ──────────────────────────────────────────────────────────────────
@@ -68,3 +69,10 @@ script = ExtResource("5_scorehud")
 [node name="ProjectilePool" type="Node" parent="."]
 script = ExtResource("3_pool")
 ProjectileScenes = Array[PackedScene]([ExtResource("4_plasmabolt")])
+
+; ── Level Director ──────────────────────────────────────────────────────────────
+; Reads res://data/level_01_waves.json and ticks the event timeline each frame.
+; BasicEnemyScene must be assigned so SpawnWave can instantiate enemies.
+[node name="LevelDirector" type="Node" parent="."]
+script = ExtResource("7_leveldirector")
+BasicEnemyScene = ExtResource("6_basicenemy")

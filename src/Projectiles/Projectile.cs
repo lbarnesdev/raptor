@@ -58,13 +58,15 @@ public abstract partial class Projectile : Area2D
     /// </summary>
     public Vector2 Velocity { get; set; }
 
-    // ── Off-screen cull bounds ───────────────────────────────────────────────
+    // ── Off-screen cull ──────────────────────────────────────────────────────
 
-    // Expanded by 64 px on all sides so projectiles that are slightly outside
-    // the viewport edge still get a frame to deal damage before culling.
+    // Extra pixels beyond each viewport edge before culling fires.
+    // Gives fast projectiles one frame to register a hit even when they are
+    // slightly outside the visible area.
     private const float CullMargin = 64f;
 
-    private Rect2 _cullBounds;
+    // Cached half-size of the viewport — constant for the lifetime of the game.
+    private Vector2 _viewHalfSize;
 
     // Guard flag: prevents double-return if OnHit() and the off-screen check
     // both fire in the same frame (unlikely but theoretically possible).
@@ -79,14 +81,8 @@ public abstract partial class Projectile : Area2D
         // override OnHit() rather than re-connecting the signal themselves.
         BodyEntered += body => OnHit(body);
 
-        // Cache cull bounds once at scene load.  The viewport size doesn't
-        // change at runtime for this project, so this is safe.
-        var size = GetViewportRect().Size;
-        _cullBounds = new Rect2(
-            -CullMargin,
-            -CullMargin,
-            size.X + CullMargin * 2f,
-            size.Y + CullMargin * 2f);
+        // Cache viewport half-size once — it never changes at runtime.
+        _viewHalfSize = GetViewportRect().Size / 2f;
     }
 
     public override void _PhysicsProcess(double delta)
@@ -96,9 +92,21 @@ public abstract partial class Projectile : Area2D
 
     public override void _Process(double delta)
     {
-        // Off-screen cull — return to pool as soon as we leave the padded bounds.
-        if (!_cullBounds.HasPoint(GlobalPosition))
+        // Off-screen cull — return to pool once we leave the padded camera bounds.
+        // Bounds are computed relative to the *current* camera position so this
+        // stays correct as ScrollCamera advances rightward (a fixed Rect2 would
+        // cull bolts that are still on-screen after the camera has scrolled).
+        var cam = GetViewport().GetCamera2D();
+        if (cam is null) return;
+
+        var c = cam.GlobalPosition;
+        if (GlobalPosition.X < c.X - _viewHalfSize.X - CullMargin ||
+            GlobalPosition.X > c.X + _viewHalfSize.X + CullMargin ||
+            GlobalPosition.Y < c.Y - _viewHalfSize.Y - CullMargin ||
+            GlobalPosition.Y > c.Y + _viewHalfSize.Y + CullMargin)
+        {
             ReturnToPool();
+        }
     }
 
     // ── Hit handling (override in subclasses) ────────────────────────────────

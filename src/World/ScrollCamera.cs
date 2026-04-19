@@ -48,14 +48,13 @@ public partial class ScrollCamera : Camera2D
         MakeCurrent();
     }
 
-    // ── Slice 4: full scroll + boundary enforcement goes here ─────────────────
-    //
-    // public override void _Process(double delta)
-    // {
-    //     if (!IsStopped)
-    //         Position += new Vector2(ScrollSpeed * (float)delta, 0f);
-    //
-    //     // Enforce left boundary — push player right if camera out-scrolls them.
-    //     // Enforce right boundary — clamp player to screen right edge.
-    // }
+    public override void _Process(double delta)
+    {
+        if (!IsStopped)
+            Position += new Vector2(ScrollSpeed * (float)delta, 0f);
+
+        // Player left/right boundary clamping is handled by Player.cs, which reads
+        // this camera's GlobalPosition each physics frame.  As the camera drifts
+        // right, Player's leftEdge rises with it — no extra code needed here.
+    }
 }
