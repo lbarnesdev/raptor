@@ -1,0 +1,150 @@
+[gd_scene load_steps=2 format=3 uid="uid://raptor0hud01"]
+
+; ── External resources ────────────────────────────────────────────────────────
+[ext_resource type="Script" path="res://src/UI/HUD.cs" id="1_hud"]
+
+; ── Scene tree ────────────────────────────────────────────────────────────────
+; Design resolution: 1920 × 1080.
+; All offsets are screen-space pixels from the top-left corner (0, 0).
+;
+; Layout:
+;   Top-left cluster  (x 20–180, y 16–98):
+;     ShieldIcon  40×40  at (20,16)
+;     LifeIcon1   30×22  at (70,20)  LifeIcon2 (108,20)  LifeIcon3 (146,20)
+;     MissileIcon1…6  20×28  at (20,70) spaced 28px apart
+;
+;   Top-right:
+;     ScoreLabel  label  at (1300,16) → (1900,50)  right-aligned
+;
+;   Bottom:
+;     BossHealthBar Control  at (80,1000) → (1840,1060)  hidden until boss
+;       Seg1 (0→573) Seg2 (580→1153) Seg3 (1160→1760)
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_hud")
+
+; ── Score + multiplier ────────────────────────────────────────────────────────
+[node name="ScoreLabel" type="Label" parent="."]
+offset_left = 1300.0
+offset_top = 16.0
+offset_right = 1900.0
+offset_bottom = 50.0
+text = "SCORE: 000000  ×1"
+horizontal_alignment = 2
+theme_override_font_sizes/font_size = 24
+
+; ── Shield indicator ──────────────────────────────────────────────────────────
+; HUD.cs drives Color and Tween.  tscn sets initial blue = Active state.
+[node name="ShieldIcon" type="ColorRect" parent="."]
+offset_left = 20.0
+offset_top = 16.0
+offset_right = 60.0
+offset_bottom = 56.0
+color = Color(0.3, 0.7, 1.0, 1.0)
+
+; ── Lives row ─────────────────────────────────────────────────────────────────
+; 3 icons, 30×22 each, 8 px gap.  HUD.cs drives Color on LivesChanged.
+[node name="LifeIcon1" type="ColorRect" parent="."]
+offset_left = 70.0
+offset_top = 20.0
+offset_right = 100.0
+offset_bottom = 42.0
+color = Color(0.2, 0.7, 1.0, 1.0)
+
+[node name="LifeIcon2" type="ColorRect" parent="."]
+offset_left = 108.0
+offset_top = 20.0
+offset_right = 138.0
+offset_bottom = 42.0
+color = Color(0.2, 0.7, 1.0, 1.0)
+
+[node name="LifeIcon3" type="ColorRect" parent="."]
+offset_left = 146.0
+offset_top = 20.0
+offset_right = 176.0
+offset_bottom = 42.0
+color = Color(0.2, 0.7, 1.0, 1.0)
+
+; ── Missile ammo row (stub — Slice 9 / TICKET-903) ────────────────────────────
+; 6 icons, 20×28 each, 8 px gap.  All yellow as placeholder.
+; HUD.cs._Ready() sets Color = MissileReady; OnMissileFired / OnAmmoGained
+; are stubbed until TICKET-903 wires the real ammo system.
+[node name="MissileIcon1" type="ColorRect" parent="."]
+offset_left = 20.0
+offset_top = 70.0
+offset_right = 40.0
+offset_bottom = 98.0
+color = Color(1.0, 0.9, 0.2, 1.0)
+
+[node name="MissileIcon2" type="ColorRect" parent="."]
+offset_left = 48.0
+offset_top = 70.0
+offset_right = 68.0
+offset_bottom = 98.0
+color = Color(1.0, 0.9, 0.2, 1.0)
+
+[node name="MissileIcon3" type="ColorRect" parent="."]
+offset_left = 76.0
+offset_top = 70.0
+offset_right = 96.0
+offset_bottom = 98.0
+color = Color(1.0, 0.9, 0.2, 1.0)
+
+[node name="MissileIcon4" type="ColorRect" parent="."]
+offset_left = 104.0
+offset_top = 70.0
+offset_right = 124.0
+offset_bottom = 98.0
+color = Color(1.0, 0.9, 0.2, 1.0)
+
+[node name="MissileIcon5" type="ColorRect" parent="."]
+offset_left = 132.0
+offset_top = 70.0
+offset_right = 152.0
+offset_bottom = 98.0
+color = Color(1.0, 0.9, 0.2, 1.0)
+
+[node name="MissileIcon6" type="ColorRect" parent="."]
+offset_left = 160.0
+offset_top = 70.0
+offset_right = 180.0
+offset_bottom = 98.0
+color = Color(1.0, 0.9, 0.2, 1.0)
+
+; ── Boss health bar ───────────────────────────────────────────────────────────
+; Mirrors the layout that used to live inline in Level01.tscn (TICKET-505).
+; Three segments totalling 1760 px with 7 px gaps; 80 px margin each side.
+; Starts hidden; BossHealthBar._Ready() / OnBossSpawned shows it.
+[node name="BossHealthBar" type="Control" parent="."]
+offset_left = 80.0
+offset_top = 1000.0
+offset_right = 1840.0
+offset_bottom = 1060.0
+visible = false
+
+[node name="Seg1" type="ProgressBar" parent="BossHealthBar"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 573.0
+offset_bottom = 30.0
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="Seg2" type="ProgressBar" parent="BossHealthBar"]
+offset_left = 580.0
+offset_top = 0.0
+offset_right = 1153.0
+offset_bottom = 30.0
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="Seg3" type="ProgressBar" parent="BossHealthBar"]
+offset_left = 1160.0
+offset_top = 0.0
+offset_right = 1760.0
+offset_bottom = 30.0
+max_value = 100.0
+value = 100.0
+show_percentage = false

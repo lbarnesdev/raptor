@@ -111,14 +111,17 @@ public partial class GameManager : Node
             GetTree().CreateTimer(2.0f),
             SceneTreeTimer.SignalName.Timeout);
 
-        // Respawn the player at the current checkpoint.
-        // CheckpointManager.cs repositions the player; we just call Respawn() here.
-        //
-        // TODO (Player ticket): replace the hard path below with a proper
-        //   GameManager → CheckpointManager → Player respawn call once those
-        //   nodes exist.
-        //
-        //   GetNode<Player>("/root/Level01/Entities/Player").Respawn();
+        // Guard: the scene may have changed during the await (e.g. all lives exhausted
+        // and GameOver fired while we were waiting — OnGameOver already changed scenes).
+        if (!IsInstanceValid(this)) return;
+
+        // Find player and checkpoint manager — both are scene-scoped (not autoloads).
+        // GetNodeOrNull returns null if the scene has already been torn down.
+        var player = GetNodeOrNull<Raptor.Player.Player>("/root/Level01/Entities/Player");
+        if (player is null) return;
+
+        Vector2 respawnPos = Raptor.World.CheckpointManager.Instance.GetRespawnPosition();
+        player.Respawn(respawnPos);
     }
 
     /// <summary>

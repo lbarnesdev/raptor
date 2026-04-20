@@ -56,9 +56,9 @@ public partial class ShieldController : Node
 
     // ── Cached node references ────────────────────────────────────────────────
 
-    private Area2D   _shieldArea   = null!;
-    private Sprite2D _shieldSprite = null!;
-    private Player   _player       = null!;
+    private Area2D    _shieldArea   = null!;
+    private CanvasItem _shieldSprite = null!;  // Polygon2D in Player.tscn; CanvasItem for Modulate access
+    private Player    _player       = null!;
 
     // ── Public API ────────────────────────────────────────────────────────────
 
@@ -68,6 +68,13 @@ public partial class ShieldController : Node
     /// body_entered handler to decide whether to call <see cref="Player.Die"/>.
     /// </summary>
     public bool IsVulnerable => _shield.IsVulnerable;
+
+    /// <summary>
+    /// Immediately restores the shield to <see cref="ShieldState.Active"/>.
+    /// Called by <see cref="Player.Respawn"/> so the player never respawns with
+    /// a broken or recharging shield.
+    /// </summary>
+    public void Reset() => _shield.Reset();
 
     // ── Lifecycle ─────────────────────────────────────────────────────────────
 
@@ -80,7 +87,9 @@ public partial class ShieldController : Node
         _player       = GetParent<Player>();
 
         // Wire projectile interception.
-        _shieldArea.BodyEntered += OnShieldAreaBodyEntered;
+        // Enemy projectiles extend Projectile which extends Area2D (not PhysicsBody2D),
+        // so AreaEntered is required — BodyEntered would never fire for them.
+        _shieldArea.AreaEntered += OnShieldAreaAreaEntered;
 
         // Wire state-change notifications from the pure-C# machine.
         // OnStateChanged fires inside ShieldStateMachine.OnEnter(), after timers
@@ -104,15 +113,17 @@ public partial class ShieldController : Node
     // ── Signal handlers ───────────────────────────────────────────────────────
 
     /// <summary>
-    /// Called when a body enters the <c>ShieldArea</c> (layer 3, mask 6).
-    /// Only enemy projectiles land here; terrain and hazards are not on layer 6.
+    /// Called when an area enters the <c>ShieldArea</c> (layer 3, mask 32).
+    /// Only enemy projectiles land here — they are on layer 6 (EnemyProjectile)
+    /// which ShieldArea masks.  All projectiles extend <see cref="Projectile"/>
+    /// which extends <c>Area2D</c>, so this signal (not BodyEntered) fires for them.
     /// </summary>
-    private void OnShieldAreaBodyEntered(Node2D body)
+    private void OnShieldAreaAreaEntered(Area2D area)
     {
         // Guard: only handle Projectile instances.
-        // ShieldArea masks layer 6 (EnemyProjectile) so non-projectile bodies
-        // should never arrive here, but the type check is cheap insurance.
-        if (body is not Projectile projectile)
+        // The mask limits overlap candidates to layer 6 already, but the type
+        // check is cheap insurance against stray areas on that layer.
+        if (area is not Projectile projectile)
             return;
 
         bool absorbed = _shield.TryAbsorbHit();

@@ -16,8 +16,8 @@
 //   DespawnAllEnemies  — QueueFrees every node in the "enemies" group
 //   SpawnBoss          — instantiates BossScene, positions it, calls StartBoss()
 //
-// Remaining types (CrossfadeMusic, RegisterCheckpoint) are
-// recognised but no-op'd with a warning until implemented in later slices.
+// RegisterCheckpoint — implemented in Slice 7 (TICKET-703).
+// CrossfadeMusic     — recognised but no-op'd with a warning until Slice 8.
 //
 // Formations (SpawnWave "formation" param):
 //   "line" — N enemies at equal vertical spacing, same X
@@ -139,9 +139,13 @@ public partial class LevelDirector : Node
                 SpawnBoss();
                 break;
 
+            case TimelineEventType.RegisterCheckpoint:
+                CheckpointManager.Instance.RegisterCheckpoint(
+                    GetInt(ev.Params, "index", 0));
+                break;
+
             // ── Future slices ─────────────────────────────────────────────────
             case TimelineEventType.CrossfadeMusic:
-            case TimelineEventType.RegisterCheckpoint:
                 GD.Print($"LevelDirector: {ev.Type} not yet implemented (future slice).");
                 break;
         }

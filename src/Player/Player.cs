@@ -29,11 +29,17 @@
 //                  When ScrollCamera scrolls (Slice 4) the left wall moves with
 //                  the camera, naturally pushing the player forward.
 //
-// Stub methods Die() and Respawn() are intentionally empty.  They will be
-// fleshed out in the ShieldController and CheckpointManager tickets respectively.
+// Die() / Respawn() lifecycle:
+//   ShieldController.OnShieldAreaAreaEntered → not absorbed → Player.Die()
+//   Player.Die() → SetPhysicsProcess(false), play hurt_flash, emit PlayerDied
+//   GameManager.OnPlayerDied() → await 2s → CheckpointManager.GetRespawnPosition()
+//                              → Player.Respawn(pos)
+//   Player.Respawn() → GlobalPosition, _isDead=false, SetPhysicsProcess(true),
+//                      ShieldController.Reset()
 // ─────────────────────────────────────────────────────────────────────────────
 
 using Godot;
+using Raptor.Core;
 
 namespace Raptor.Player;
 
@@ -61,19 +67,32 @@ public partial class Player : CharacterBody2D
     /// </summary>
     private const float EdgeMargin = 32f;
 
+    // ── Death guard ───────────────────────────────────────────────────────────
+
+    /// <summary>
+    /// Set to <c>true</c> between <see cref="Die"/> and <see cref="Respawn"/>.
+    /// Guards against <see cref="Die"/> being called twice (e.g. two projectiles
+    /// arriving in the same physics step when the shield is Broken).
+    /// </summary>
+    private bool _isDead;
+
     // ── Cached node references ────────────────────────────────────────────────
 
     // GetNode is called once in _Ready and the result is cached.
     // Calling GetNode every _PhysicsProcess frame is cheap but unnecessary noise;
     // caching also makes the null-check happen at startup rather than at runtime.
-    private Camera2D _camera = null!;
+    private Camera2D          _camera          = null!;
+    private ShieldController  _shieldController = null!;
+    private AnimationPlayer   _hurtFlash        = null!;
 
     // ── Lifecycle ─────────────────────────────────────────────────────────────
 
     public override void _Ready()
     {
         // Camera is a sibling in the Level01 scene (ADR-002: not a child of Player).
-        _camera = GetNode<Camera2D>("/root/Level01/ScrollCamera");
+        _camera           = GetNode<Camera2D>("/root/Level01/ScrollCamera");
+        _shieldController = GetNode<ShieldController>("ShieldController");
+        _hurtFlash        = GetNode<AnimationPlayer>("HurtFlash");
     }
 
     // ── Movement ──────────────────────────────────────────────────────────────
@@ -123,40 +142,52 @@ public partial class Player : CharacterBody2D
     // ── Public API ────────────────────────────────────────────────────────────
 
     /// <summary>
-    /// Kills the player.  Called by the projectile handler when a hit lands
-    /// while the shield is <see cref="ShieldIsActive"/> == <c>false</c>.
+    /// Kills the player.  Called by <see cref="ShieldController"/> when an enemy
+    /// projectile hits while the shield is <see cref="ShieldState.Broken"/>.
     /// </summary>
     /// <remarks>
-    /// Full implementation delivered in the ShieldController ticket (TICKET-031).
-    /// At that point this method will:
-    ///   1. Play the death animation.
-    ///   2. Emit <c>EventBus.Instance.EmitSignal(EventBus.SignalName.PlayerDied)</c>.
-    ///   3. Disable input processing until <see cref="Respawn"/> is called.
+    /// Idempotent — safe to call from multiple projectiles arriving the same frame.
+    /// The 2-second respawn window and lives decrement are handled by
+    /// <see cref="GameManager.OnPlayerDied"/> which subscribes to
+    /// <see cref="EventBus.PlayerDied"/>.
     /// </remarks>
     public void Die()
     {
-        // TODO (TICKET-031): animate death, emit PlayerDied, disable input.
+        if (_isDead) return;
+        _isDead = true;
+
+        // Stop processing input/movement until Respawn() re-enables it.
+        SetPhysicsProcess(false);
+
+        // Visual feedback — hurt_flash animation flickers PlaceholderShape
+        // red/transparent three times over 0.5 s, ending at normal blue.
+        _hurtFlash.Play("hurt_flash");
+
+        // Audio + score multiplier reset are handled by ShieldController on the
+        // GracePeriod → Broken transition.  We only need the death SFX here.
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.PlayerDeath);
+
+        // Notify GameManager: decrement lives, schedule respawn or Game Over.
+        EventBus.Instance.EmitSignal(EventBus.SignalName.PlayerDied);
     }
 
     /// <summary>
-    /// Teleports the player to <paramref name="position"/> and resets
-    /// transient state (shield, ammo).  Called by <c>GameManager.OnPlayerDied</c>
-    /// after the 2-second respawn delay.
+    /// Teleports the player to <paramref name="position"/> and resets transient
+    /// state.  Called by <see cref="GameManager"/> after the 2-second death pause.
     /// </summary>
     /// <param name="position">
-    /// World-space spawn point supplied by <c>CheckpointManager</c>.
+    /// World-space respawn point from <c>CheckpointManager.GetRespawnPosition()</c>.
     /// </param>
-    /// <remarks>
-    /// Full implementation delivered in the CheckpointManager ticket.
-    /// At that point this method will:
-    ///   1. Set <c>GlobalPosition = position</c>.
-    ///   2. Call <c>ShieldController.Reset()</c> to restore the shield.
-    ///   3. Re-enable input processing.
-    /// </remarks>
     public void Respawn(Vector2 position)
     {
-        // TODO (CheckpointManager ticket): teleport, reset shield + ammo, re-enable input.
-        GlobalPosition = position; // minimal stub so GameManager can call this safely
+        GlobalPosition = position;
+        _isDead        = false;
+
+        // Re-enable physics so the player can move again.
+        SetPhysicsProcess(true);
+
+        // Restore the shield to Active so the player doesn't respawn defenceless.
+        _shieldController.Reset();
     }
 
     // ── Shield state pass-through ─────────────────────────────────────────────
@@ -164,12 +195,8 @@ public partial class Player : CharacterBody2D
     /// <summary>
     /// <c>true</c> when the shield is currently absorbing hits
     /// (states <c>Active</c>, <c>GracePeriod</c>, or <c>Recharging</c>).
+    /// Read by the player body's own collision handler if it ever needs to
+    /// distinguish "hit while shielded" from "hit while broken".
     /// </summary>
-    /// <remarks>
-    /// Replaced by a real implementation in TICKET-031 once
-    /// <c>ShieldController</c> is wired up.  The stub returns <c>false</c>
-    /// so projectile hit handlers compile and run without crashing — they
-    /// will always route through <see cref="Die"/> until the shield is live.
-    /// </remarks>
-    public bool ShieldIsActive => false; // TICKET-031: return _shieldController.IsActive
+    public bool ShieldIsActive => !_shieldController.IsVulnerable;
 }

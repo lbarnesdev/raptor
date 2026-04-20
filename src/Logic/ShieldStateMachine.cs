@@ -103,6 +103,24 @@ public sealed class ShieldStateMachine : StateMachine<ShieldState>
     // ── Public API ──────────────────────────────────────────────────────────
 
     /// <summary>
+    /// Forces the machine back to <see cref="ShieldState.Active"/> and clears
+    /// any pending timer.  Call this when the player respawns so they never
+    /// restart with a broken or still-recharging shield.
+    /// </summary>
+    /// <remarks>
+    /// Calling <see cref="StateMachine{TState}.Transition"/> from any state
+    /// to Active is safe: <c>CanTransition</c> allows all transitions.
+    /// The resulting <c>OnEnter(Active)</c> fires <see cref="OnStateChanged"/>
+    /// so <c>ShieldController</c> updates the visual immediately.
+    /// </remarks>
+    public void Reset()
+    {
+        _graceTimer    = 0f;
+        _rechargeTimer = 0f;
+        Transition(ShieldState.Active);
+    }
+
+    /// <summary>
     /// Attempt to absorb an incoming hit.
     /// </summary>
     /// <returns>

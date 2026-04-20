@@ -5,14 +5,15 @@
 [ext_resource type="PackedScene" uid="uid://raptor0player01" path="res://scenes/player/Player.tscn" id="2_player"]
 [ext_resource type="Script" path="res://src/Projectiles/ProjectilePool.cs" id="3_pool"]
 [ext_resource type="PackedScene" uid="uid://raptor0bolt01" path="res://scenes/projectiles/PlasmaBolt.tscn" id="4_plasmabolt"]
-[ext_resource type="Script" path="res://src/UI/ScoreHud.cs" id="5_scorehud"]
+[ext_resource type="PackedScene" uid="uid://raptor0hud01" path="res://scenes/ui/HUD.tscn" id="5_hud"]
 [ext_resource type="PackedScene" uid="uid://raptor0enemy01" path="res://scenes/enemies/BasicEnemy.tscn" id="6_basicenemy"]
 [ext_resource type="Script" path="res://src/World/LevelDirector.cs" id="7_leveldirector"]
 [ext_resource type="PackedScene" uid="uid://raptor0boss01" path="res://scenes/boss/Boss.tscn" id="8_boss"]
-[ext_resource type="Script" path="res://src/UI/BossHealthBar.cs" id="9_bosshpbar"]
+; id 9 (BossHealthBar.cs) removed — boss bar now lives inside HUD.tscn (TICKET-704)
 [ext_resource type="PackedScene" uid="uid://raptor0cblast01" path="res://scenes/projectiles/ConstitutionBlast.tscn" id="10_cblast"]
 [ext_resource type="PackedScene" uid="uid://raptor0foxpulse01" path="res://scenes/projectiles/FoxBroadcastPulse.tscn" id="11_foxpulse"]
 [ext_resource type="PackedScene" uid="uid://raptor0shuriken01" path="res://scenes/projectiles/HateShuriken.tscn" id="12_shuriken"]
+[ext_resource type="Script" path="res://src/World/CheckpointManager.cs" id="13_checkpointmgr"]
 
 ; ── Scene tree ────────────────────────────────────────────────────────────────
 ; Slice 1 — camera + player.
@@ -57,55 +58,10 @@ position = Vector2(300, 540)
 ; Explosion VFX, SporeCloud instances. Empty until Slice 5.
 [node name="EffectsContainer" type="Node2D" parent="."]
 
-; ── Score HUD ──────────────────────────────────────────────────────────────────
-; CanvasLayer renders at a fixed screen position regardless of camera scroll.
-; ScoreLabel (Label + ScoreHud.cs) subscribes to EventBus.ScoreChanged.
-[node name="HUD" type="CanvasLayer" parent="."]
-
-[node name="ScoreLabel" type="Label" parent="HUD"]
-offset_left = 20.0
-offset_top = 16.0
-script = ExtResource("5_scorehud")
-
-; ── Boss health bar ──────────────────────────────────────────────────────────
-; Three horizontal ProgressBar segments — one per boss phase.
-; Positioned at the bottom of the screen (1920 × 1080 design resolution).
-; Starts invisible; BossHealthBar.cs shows/hides via EventBus boss signals.
-; Segment widths: 573 px each with 7 px gaps → 1760 px total; 80 px margin each side.
-[node name="BossHealthBar" type="Control" parent="HUD"]
-offset_left = 80.0
-offset_top = 1000.0
-offset_right = 1840.0
-offset_bottom = 1060.0
-visible = false
-script = ExtResource("9_bosshpbar")
-
-[node name="Seg1" type="ProgressBar" parent="HUD/BossHealthBar"]
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 573.0
-offset_bottom = 30.0
-max_value = 100.0
-value = 100.0
-show_percentage = false
-
-[node name="Seg2" type="ProgressBar" parent="HUD/BossHealthBar"]
-offset_left = 580.0
-offset_top = 0.0
-offset_right = 1153.0
-offset_bottom = 30.0
-max_value = 100.0
-value = 100.0
-show_percentage = false
-
-[node name="Seg3" type="ProgressBar" parent="HUD/BossHealthBar"]
-offset_left = 1160.0
-offset_top = 0.0
-offset_right = 1760.0
-offset_bottom = 30.0
-max_value = 100.0
-value = 100.0
-show_percentage = false
+; ── HUD ────────────────────────────────────────────────────────────────────────
+; Instanced from HUD.tscn (TICKET-704).  Owns score label, shield icon,
+; life icons, missile ammo row, and boss health bar — all driven by EventBus.
+[node name="HUD" parent="." instance=ExtResource("5_hud")]
 
 ; ── Projectile pool ─────────────────────────────────────────────────────────────
 ; NOT an autoload — lifetime is scoped to the level scene.
@@ -119,6 +75,28 @@ script = ExtResource("3_pool")
 ;   [3] CrystalSpine (S8)  [4] OrganicSpore (S8)  [5] ConstitutionBlast
 ;   [6] FoxBroadcastPulse (Slice 6)                [7] HateShuriken (Slice 6)
 ProjectileScenes = Array[PackedScene]([ExtResource("4_plasmabolt"), null, null, null, null, ExtResource("10_cblast"), ExtResource("11_foxpulse"), ExtResource("12_shuriken")])
+
+; ── Checkpoints ─────────────────────────────────────────────────────────────────
+; Three Marker2D nodes define respawn positions.  Indices match the JSON events:
+;   0 = Checkpoint_Act1  (level start  — x=300,   never fired from JSON)
+;   1 = Checkpoint_Act2  (t=80s        — x=9600,  scroll speed 120 px/s)
+;   2 = Checkpoint_Boss  (t=160s       — x=19200, just before boss arena)
+[node name="Checkpoints" type="Node2D" parent="."]
+
+[node name="Checkpoint_Act1" type="Marker2D" parent="Checkpoints"]
+position = Vector2(300, 540)
+
+[node name="Checkpoint_Act2" type="Marker2D" parent="Checkpoints"]
+position = Vector2(9600, 540)
+
+[node name="Checkpoint_Boss" type="Marker2D" parent="Checkpoints"]
+position = Vector2(19200, 540)
+
+; CheckpointManager is NOT an autoload — lifetime is scoped to the level scene.
+; Checkpoints array wired to the three Marker2D nodes above.
+[node name="CheckpointManager" type="Node" parent="."]
+script = ExtResource("13_checkpointmgr")
+Checkpoints = Array[NodePath]([NodePath("../Checkpoints/Checkpoint_Act1"), NodePath("../Checkpoints/Checkpoint_Act2"), NodePath("../Checkpoints/Checkpoint_Boss")])
 
 ; ── Level Director ──────────────────────────────────────────────────────────────
 ; Reads res://data/level_01_waves.json and ticks the event timeline each frame.

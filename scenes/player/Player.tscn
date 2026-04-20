@@ -1,10 +1,35 @@
-[gd_scene load_steps=7 format=3 uid="uid://raptor0player01"]
+[gd_scene load_steps=9 format=3 uid="uid://raptor0player01"]
 
 ; ── External scripts ──────────────────────────────────────────────────────────
 [ext_resource type="Script" path="res://src/Player/Player.cs" id="1_player"]
 [ext_resource type="Script" path="res://src/Player/ShieldController.cs" id="2_shield"]
 [ext_resource type="Script" path="res://src/Player/PlasmaWeapon.cs" id="3_plasma"]
 [ext_resource type="Script" path="res://src/Player/MissileWeapon.cs" id="4_missile"]
+
+; ── Animations ───────────────────────────────────────────────────────────────
+; hurt_flash: flickers the Player node's modulate alpha 0→1 over 0.5 s (3 pulses).
+; AnimationPlayer's root_node is set to ".." so it can target Player's modulate.
+[sub_resource type="Animation" id="3_hurtanim"]
+resource_name = "hurt_flash"
+length = 0.5
+loop_mode = 0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../PlaceholderShape:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0.0, 0.083, 0.166, 0.25, 0.333, 0.416, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 0.3, 0.3, 0.0), Color(1, 0.3, 0.3, 1.0), Color(1, 0.3, 0.3, 0.0), Color(1, 0.3, 0.3, 1.0), Color(1, 0.3, 0.3, 0.0), Color(1, 0.3, 0.3, 1.0), Color(0.2, 0.6, 1.0, 1.0)]
+}
+
+[sub_resource type="AnimationLibrary" id="4_animlib"]
+_data = {
+"hurt_flash": SubResource("3_hurtanim")
+}
 
 ; ── Collision shapes ──────────────────────────────────────────────────────────
 ; Body: tight rectangle around the F-22 fuselage (80×32 px at 128×64 sprite size)
@@ -54,8 +79,14 @@ collision_mask = 32
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ShieldController/ShieldArea"]
 shape = SubResource("2_shieldshape")
 
-; ShieldSprite has no texture in Slice 1 — shield is invisible until art lands.
-[node name="ShieldSprite" type="Sprite2D" parent="ShieldController/ShieldArea"]
+; ShieldSprite — Polygon2D octagon approximating the CircleShape2D (radius 50).
+; Starts at the Active colour (blue, 0.8 alpha); ShieldController.OnShieldStateChanged
+; drives Modulate at runtime.  No texture needed — pure vertex colour.
+; 8 vertices at radius 48, angles 0°, 45°, 90° … 315°.
+[node name="ShieldSprite" type="Polygon2D" parent="ShieldController/ShieldArea"]
+polygon = PackedVector2Array(48, 0, 33.94, 33.94, 0, 48, -33.94, 33.94, -48, 0, -33.94, -33.94, 0, -48, 33.94, -33.94)
+color = Color(1, 1, 1, 1)
+modulate = Color(0.3, 0.7, 1.0, 0.8)
 
 ; ── Plasma weapon ──────────────────────────────────────────────────────────────
 [node name="PlasmaWeapon" type="Node2D" parent="."]
@@ -73,5 +104,9 @@ script = ExtResource("4_missile")
 position = Vector2(35, 0)
 
 ; ── Hurt flash ─────────────────────────────────────────────────────────────────
-; AnimationPlayer with no animations — add hurt_flash animation in Slice 4.
+; Flickers PlaceholderShape modulate red/transparent on hit, returns to blue.
+; Player.Die() calls: GetNode<AnimationPlayer>("HurtFlash").Play("hurt_flash")
 [node name="HurtFlash" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("4_animlib")
+}

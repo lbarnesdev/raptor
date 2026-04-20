@@ -13,6 +13,7 @@
     { "time":  62.0, "type": "SpawnWave",         "enemy": "BasicEnemy", "count":  9, "formation": "V",    "y": 540, "spread": 480 },
     { "time":  70.0, "type": "SpawnWave",         "enemy": "BasicEnemy", "count":  5, "formation": "line", "y": 270, "spread": 200 },
     { "time":  70.5, "type": "SpawnWave",         "enemy": "BasicEnemy", "count":  5, "formation": "line", "y": 810, "spread": 200 },
+    { "time":  80.0, "type": "RegisterCheckpoint", "index": 1 },
     { "time":  80.0, "type": "SpawnWave",         "enemy": "BasicEnemy", "count": 11, "formation": "V",    "y": 540, "spread": 560 },
     { "time":  90.0, "type": "SpawnWave",         "enemy": "BasicEnemy", "count":  8, "formation": "line", "y": 540, "spread": 600 },
     { "time": 100.0, "type": "SpawnWave",         "enemy": "BasicEnemy", "count": 11, "formation": "V",    "y": 540, "spread": 600 },
@@ -22,6 +23,7 @@
     { "time": 130.0, "type": "SpawnWave",         "enemy": "BasicEnemy", "count": 10, "formation": "line", "y": 540, "spread": 700 },
     { "time": 140.0, "type": "SpawnWave",         "enemy": "BasicEnemy", "count": 13, "formation": "V",    "y": 540, "spread": 680 },
     { "time": 155.0, "type": "SpawnWave",         "enemy": "BasicEnemy", "count":  8, "formation": "line", "y": 540, "spread": 640 },
+    { "time": 160.0, "type": "RegisterCheckpoint", "index": 2 },
     { "time": 160.0, "type": "StopScroll" },
     { "time": 161.0, "type": "DespawnAllEnemies" },
     { "time": 162.0, "type": "SpawnBoss",         "boss": "BossAlpha", "x": 1600, "y": 540 }
