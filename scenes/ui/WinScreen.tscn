@@ -1,0 +1,74 @@
+[gd_scene load_steps=2 format=3 uid="uid://raptor0winscreen01"]
+
+; ── External resources ────────────────────────────────────────────────────────
+[ext_resource type="Script" path="res://src/UI/WinScreen.cs" id="1_winscreen"]
+
+; ── Scene tree ────────────────────────────────────────────────────────────────
+; Root is CanvasLayer so this scene renders above the level scene during
+; the transition (GameManager.ChangeSceneToFile replaces the current scene,
+; so in practice the CanvasLayer is the whole screen — the choice still
+; future-proofs overlaying the screen on top of a pause state).
+;
+; Layout assumes 1920×1080 design resolution.
+; All controls use anchor_left/right/top/bottom for centre-alignment.
+
+[node name="WinScreen" type="CanvasLayer"]
+script = ExtResource("1_winscreen")
+
+; Full-screen background colour rect — tinted by WinScreen.cs in _Ready().
+[node name="Background" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.85, 0.68, 0.10, 0.88)
+
+; Ending variant label — "ALIEN NEUTRALIZED" or "ALIEN ESCAPED".
+[node name="EndingLabel" type="Label" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_top = 0.3
+anchor_bottom = 0.3
+offset_left = -400.0
+offset_right = 400.0
+offset_top = -40.0
+offset_bottom = 40.0
+text = "ALIEN NEUTRALIZED"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 64
+
+; Final score — formatted as six digits.
+[node name="ScoreLabel" type="Label" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_right = 200.0
+offset_top = -30.0
+offset_bottom = 30.0
+text = "000000"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 48
+
+; Play Again button.
+[node name="PlayAgainButton" type="Button" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_top = 0.65
+anchor_bottom = 0.65
+offset_left = -160.0
+offset_right = 160.0
+offset_top = -30.0
+offset_bottom = 30.0
+text = "PLAY AGAIN"
+
+; Main Menu button.
+[node name="MenuButton" type="Button" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_top = 0.75
+anchor_bottom = 0.75
+offset_left = -160.0
+offset_right = 160.0
+offset_top = -30.0
+offset_bottom = 30.0
+text = "MENU"

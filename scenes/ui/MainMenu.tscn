@@ -1,0 +1,50 @@
+[gd_scene load_steps=2 format=3 uid="uid://raptor0mainmenu01"]
+
+; ── External resources ────────────────────────────────────────────────────────
+[ext_resource type="Script" path="res://src/UI/MainMenu.cs" id="1_mainmenu"]
+
+; ── Scene tree ────────────────────────────────────────────────────────────────
+
+[node name="MainMenu" type="CanvasLayer"]
+script = ExtResource("1_mainmenu")
+
+[node name="Background" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.04, 0.04, 0.12, 1.0)
+
+; Large title.
+[node name="TitleLabel" type="Label" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_top = 0.25
+anchor_bottom = 0.25
+offset_left = -300.0
+offset_right = 300.0
+offset_top = -60.0
+offset_bottom = 60.0
+text = "RAPTOR"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 96
+
+[node name="PlayButton" type="Button" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_top = 0.55
+anchor_bottom = 0.55
+offset_left = -160.0
+offset_right = 160.0
+offset_top = -30.0
+offset_bottom = 30.0
+text = "PLAY"
+
+[node name="QuitButton" type="Button" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_top = 0.67
+anchor_bottom = 0.67
+offset_left = -160.0
+offset_right = 160.0
+offset_top = -30.0
+offset_bottom = 30.0
+text = "QUIT"

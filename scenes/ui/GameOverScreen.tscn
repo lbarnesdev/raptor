@@ -1,0 +1,62 @@
+[gd_scene load_steps=2 format=3 uid="uid://raptor0gameover01"]
+
+; ── External resources ────────────────────────────────────────────────────────
+[ext_resource type="Script" path="res://src/UI/GameOverScreen.cs" id="1_gameover"]
+
+; ── Scene tree ────────────────────────────────────────────────────────────────
+
+[node name="GameOverScreen" type="CanvasLayer"]
+script = ExtResource("1_gameover")
+
+[node name="Background" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.4, 0.05, 0.05, 0.92)
+
+[node name="TitleLabel" type="Label" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_top = 0.3
+anchor_bottom = 0.3
+offset_left = -300.0
+offset_right = 300.0
+offset_top = -40.0
+offset_bottom = 40.0
+text = "MISSION FAILED"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 64
+
+[node name="ScoreLabel" type="Label" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_right = 200.0
+offset_top = -30.0
+offset_bottom = 30.0
+text = "000000"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 48
+
+[node name="RetryButton" type="Button" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_top = 0.65
+anchor_bottom = 0.65
+offset_left = -160.0
+offset_right = 160.0
+offset_top = -30.0
+offset_bottom = 30.0
+text = "RETRY"
+
+[node name="MenuButton" type="Button" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_top = 0.75
+anchor_bottom = 0.75
+offset_left = -160.0
+offset_right = 160.0
+offset_top = -30.0
+offset_bottom = 30.0
+text = "MENU"
