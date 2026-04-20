@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://raptor0boss01"]
+[gd_scene format=3 uid="uid://bs3dckcbf0byy"]
 
 ; ── External resources ────────────────────────────────────────────────────────
 [ext_resource type="Script" path="res://src/Boss/Boss.cs"            id="1_boss"]

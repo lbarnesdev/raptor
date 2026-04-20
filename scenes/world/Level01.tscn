@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://raptor0level001"]
+[gd_scene load_steps=10 format=3 uid="uid://raptor0level001"]
 
 ; ── External resources ────────────────────────────────────────────────────────
 [ext_resource type="Script" path="res://src/World/ScrollCamera.cs" id="1_scrollcam"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://raptor0enemy01" path="res://scenes/enemies/BasicEnemy.tscn" id="6_basicenemy"]
 [ext_resource type="Script" path="res://src/World/LevelDirector.cs" id="7_leveldirector"]
 [ext_resource type="PackedScene" uid="uid://raptor0boss01" path="res://scenes/boss/Boss.tscn" id="8_boss"]
+[ext_resource type="Script" path="res://src/UI/BossHealthBar.cs" id="9_bosshpbar"]
 
 ; ── Scene tree ────────────────────────────────────────────────────────────────
 ; Slice 1 — camera + player.
@@ -62,6 +63,46 @@ position = Vector2(300, 540)
 offset_left = 20.0
 offset_top = 16.0
 script = ExtResource("5_scorehud")
+
+; ── Boss health bar ──────────────────────────────────────────────────────────
+; Three horizontal ProgressBar segments — one per boss phase.
+; Positioned at the bottom of the screen (1920 × 1080 design resolution).
+; Starts invisible; BossHealthBar.cs shows/hides via EventBus boss signals.
+; Segment widths: 573 px each with 7 px gaps → 1760 px total; 80 px margin each side.
+[node name="BossHealthBar" type="Control" parent="HUD"]
+offset_left = 80.0
+offset_top = 1000.0
+offset_right = 1840.0
+offset_bottom = 1060.0
+visible = false
+script = ExtResource("9_bosshpbar")
+
+[node name="Seg1" type="ProgressBar" parent="HUD/BossHealthBar"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 573.0
+offset_bottom = 30.0
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="Seg2" type="ProgressBar" parent="HUD/BossHealthBar"]
+offset_left = 580.0
+offset_top = 0.0
+offset_right = 1153.0
+offset_bottom = 30.0
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="Seg3" type="ProgressBar" parent="HUD/BossHealthBar"]
+offset_left = 1160.0
+offset_top = 0.0
+offset_right = 1760.0
+offset_bottom = 30.0
+max_value = 100.0
+value = 100.0
+show_percentage = false
 
 ; ── Projectile pool ─────────────────────────────────────────────────────────────
 ; NOT an autoload — lifetime is scoped to the level scene.

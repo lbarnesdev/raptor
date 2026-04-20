@@ -163,7 +163,9 @@ public partial class LevelDirector : Node
             return;
         }
 
-        var boss = BossScene.Instantiate<Node2D>();
+        // Instantiate as the concrete Boss type so nameof resolves against
+        // the class, not the Raptor.Boss namespace (which shares the name).
+        var boss = BossScene.Instantiate<Raptor.Boss.Boss>();
         _enemyContainer.AddChild(boss);
 
         // Place the boss in the right-centre of the current camera view.
@@ -175,7 +177,7 @@ public partial class LevelDirector : Node
 
         // Defer StartBoss() by one frame so Boss._Ready() has run and
         // Boss.Instance is valid before the phase activation begins.
-        boss.CallDeferred(Boss.MethodName.StartBoss);
+        boss.CallDeferred(nameof(boss.StartBoss));
 
         GD.Print($"LevelDirector: Boss spawned at {boss.GlobalPosition}.");
     }
