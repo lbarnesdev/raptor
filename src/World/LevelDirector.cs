@@ -73,6 +73,8 @@ public partial class LevelDirector : Node
         _enemyContainer = GetNode<Node2D>("/root/Level01/EnemyContainer");
         _viewHalfWidth  = GetViewport().GetVisibleRect().Size.X / 2f;
 
+        EventBus.Instance.BossSpawnBonusWave += OnBossSpawnBonusWave;
+
         var json = Godot.FileAccess.GetFileAsString("res://data/level_01_waves.json");
         if (string.IsNullOrEmpty(json))
         {
@@ -81,6 +83,26 @@ public partial class LevelDirector : Node
         }
 
         _timeline = LevelDirectorTimeline.FromJson(json);
+    }
+
+    public override void _ExitTree()
+    {
+        EventBus.Instance.BossSpawnBonusWave -= OnBossSpawnBonusWave;
+    }
+
+    // ── Bonus wave handler (Phase 2) ──────────────────────────────────────────
+
+    private void OnBossSpawnBonusWave()
+    {
+        // Spawn a 2-enemy line formation just off the right edge of the screen,
+        // matching the same formation logic used by the JSON timeline SpawnWave.
+        SpawnWave(new Dictionary<string, object>
+        {
+            ["count"]     = 2,
+            ["formation"] = "line",
+            ["y"]         = 540,   // vertical screen centre
+            ["spread"]    = 200,
+        });
     }
 
     // ── Per-frame tick ────────────────────────────────────────────────────────

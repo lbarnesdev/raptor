@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://raptor0shuriken01"]
+
+; ── External resources ────────────────────────────────────────────────────────
+[ext_resource type="Script" path="res://src/Projectiles/HateShuriken.cs" id="1_shuriken"]
+
+; ── Collision shape ───────────────────────────────────────────────────────────
+[sub_resource type="CircleShape2D" id="1_shurikenShape"]
+radius = 8.0
+
+; ── Scene tree ────────────────────────────────────────────────────────────────
+; Collision layers:
+;   HateShuriken — layer 6 (EnemyProjectile) = 2^5 = 32
+;                   mask:  Player(2) + PlayerShield(4) = 6
+
+[node name="HateShuriken" type="Area2D"]
+collision_layer = 32
+collision_mask = 6
+script = ExtResource("1_shuriken")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("1_shurikenShape")
+
+; Generic placeholder — silver cross/plus shape.
+; Shown when ContentWarningEnabled = false (or UseGenericSprite = true).
+; Replace with sanitised animated sprite in Slice 11.
+[node name="GenericSprite" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-2, -12, 2, -12, 2, -2, 12, -2, 12, 2, 2, 2, 2, 12, -2, 12, -2, 2, -12, 2, -12, -2, -2, -2)
+color = Color(0.75, 0.75, 0.75, 1.0)
+visible = true
+
+; Warning placeholder — dark cross/plus shape (same geometry, different colour).
+; Shown when ContentWarningEnabled = true (default).
+; Replace with original-asset animated sprite in Slice 11.
+[node name="WarningSprite" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-2, -12, 2, -12, 2, -2, 12, -2, 12, 2, 2, 2, 2, 12, -2, 12, -2, 2, -12, 2, -12, -2, -2, -2)
+color = Color(0.2, 0.2, 0.2, 1.0)
+visible = false

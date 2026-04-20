@@ -143,5 +143,14 @@ public abstract partial class Projectile : Area2D
     internal void OnActivated()
     {
         _returned = false;
+        OnActivation();
     }
+
+    /// <summary>
+    /// Override in subclasses to reset any per-activation state that the
+    /// pool does not manage (e.g. a reflect counter in
+    /// <see cref="HateShuriken"/>).  Called immediately after
+    /// <c>_returned</c> is cleared, before the projectile is made visible.
+    /// </summary>
+    protected virtual void OnActivation() { }
 }

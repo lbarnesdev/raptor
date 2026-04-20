@@ -123,6 +123,13 @@ public partial class EventBus : Node
     [Signal] public delegate void BossSpawnedEventHandler();
 
     /// <summary>
+    /// Fired by <c>Phase2Controller</c> every 8 s while Phase 2 is active.
+    /// <c>LevelDirector</c> subscribes and calls <c>SpawnWave</c> with a
+    /// 2-enemy "line" formation as a mid-fight difficulty spike (PRD F-425).
+    /// </summary>
+    [Signal] public delegate void BossSpawnBonusWaveEventHandler();
+
+    /// <summary>
     /// Fired whenever the boss advances to a new combat phase.
     /// <paramref name="phase"/> is 1, 2, or 3.
     /// </summary>

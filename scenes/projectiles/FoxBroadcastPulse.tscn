@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://raptor0foxpulse01"]
+
+; ── External resources ────────────────────────────────────────────────────────
+[ext_resource type="Script" path="res://src/Projectiles/FoxBroadcastPulse.cs" id="1_foxpulse"]
+
+; ── Collision shape ───────────────────────────────────────────────────────────
+; Square bounding box for the diamond visual (~14 px half-size → 10×10 tight hitbox).
+[sub_resource type="RectangleShape2D" id="1_foxpulseshape"]
+size = Vector2(10, 10)
+
+; ── Scene tree ────────────────────────────────────────────────────────────────
+; Collision layers:
+;   FoxBroadcastPulse — layer 6 (EnemyProjectile) = 2^5 = 32
+;                        mask:  Player(2) + PlayerShield(4) = 6
+
+[node name="FoxBroadcastPulse" type="Area2D"]
+collision_layer = 32
+collision_mask = 6
+script = ExtResource("1_foxpulse")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("1_foxpulseshape")
+
+; Placeholder: small red diamond ~14 px.
+; Replace with AnimatedSprite2D (Fox News logo) in Slice 11.
+[node name="PlaceholderShape" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(14, 0, 0, 14, -14, 0, 0, -14)
+color = Color(0.9, 0.1, 0.1, 1.0)
