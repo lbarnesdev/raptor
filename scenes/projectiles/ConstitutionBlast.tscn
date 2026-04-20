@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://raptor0cblast01"]
+
+; ── External resources ────────────────────────────────────────────────────────
+[ext_resource type="Script" path="res://src/Projectiles/ConstitutionBlast.cs" id="1_cblast"]
+
+; ── Collision shape ───────────────────────────────────────────────────────────
+; Circle matches the ~28 px visual radius with a slightly tighter hitbox.
+[sub_resource type="CircleShape2D" id="1_cblastshape"]
+radius = 18.0
+
+; ── Scene tree ────────────────────────────────────────────────────────────────
+; Collision layers:
+;   ConstitutionBlast — layer 6 (EnemyProjectile) = 2^5 = 32
+;                        mask:  Player(2) + PlayerShield(4) = 6
+;
+; Note: mask bit 4 (PlayerShield=4) is included so the ShieldArea AreaEntered
+; signal in ShieldController can also detect this projectile in Slice 7.
+; BodyEntered on this Area2D fires only for Player CharacterBody2D (mask bit 2).
+
+[node name="ConstitutionBlast" type="Area2D"]
+collision_layer = 32
+collision_mask = 6
+script = ExtResource("1_cblast")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("1_cblastshape")
+
+; Placeholder: gold octagon ~28 px radius.
+; Replace with AnimatedSprite2D (constitution scroll art) in Slice 11.
+[node name="PlaceholderShape" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(28, 0, 20, 20, 0, 28, -20, 20, -28, 0, -20, -20, 0, -28, 20, -20)
+color = Color(1.0, 0.82, 0.1, 1.0)

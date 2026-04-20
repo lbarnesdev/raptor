@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://raptor0level001"]
+[gd_scene load_steps=11 format=3 uid="uid://raptor0level001"]
 
 ; ── External resources ────────────────────────────────────────────────────────
 [ext_resource type="Script" path="res://src/World/ScrollCamera.cs" id="1_scrollcam"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://src/World/LevelDirector.cs" id="7_leveldirector"]
 [ext_resource type="PackedScene" uid="uid://raptor0boss01" path="res://scenes/boss/Boss.tscn" id="8_boss"]
 [ext_resource type="Script" path="res://src/UI/BossHealthBar.cs" id="9_bosshpbar"]
+[ext_resource type="PackedScene" uid="uid://raptor0cblast01" path="res://scenes/projectiles/ConstitutionBlast.tscn" id="10_cblast"]
 
 ; ── Scene tree ────────────────────────────────────────────────────────────────
 ; Slice 1 — camera + player.
@@ -111,7 +112,11 @@ show_percentage = false
 ;   [1..7]          ← assigned in later slices; pool logs warnings for nulls
 [node name="ProjectilePool" type="Node" parent="."]
 script = ExtResource("3_pool")
-ProjectileScenes = Array[PackedScene]([ExtResource("4_plasmabolt")])
+; ProjectileScenes indexed by ProjectileType enum:
+;   [0] PlasmaBolt         [1] Missile (Slice 9)  [2] PlasmaBlob (Slice 8)
+;   [3] CrystalSpine (S8)  [4] OrganicSpore (S8)  [5] ConstitutionBlast
+;   [6] FoxBroadcastPulse (Slice 6)                [7] HateShuriken (Slice 6)
+ProjectileScenes = Array[PackedScene]([ExtResource("4_plasmabolt"), null, null, null, null, ExtResource("10_cblast")])
 
 ; ── Level Director ──────────────────────────────────────────────────────────────
 ; Reads res://data/level_01_waves.json and ticks the event timeline each frame.
