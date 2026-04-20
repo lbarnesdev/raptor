@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://raptor0cblast01"]
+[gd_scene format=3 uid="uid://c01ql4jvpxoe7"]
 
 ; ── External resources ────────────────────────────────────────────────────────
 [ext_resource type="Script" path="res://src/Projectiles/ConstitutionBlast.cs" id="1_cblast"]

@@ -316,22 +316,22 @@ public partial class Boss : Node2D
 
         EventBus.Instance.EmitSignal(EventBus.SignalName.BossDefeated);
 
-        // Slice 6 (TICKET-606): instantiate AlienPassengerScene, call Detach(),
-        // wire flee timer for good/bad ending.
-        // Stub: just log for now.
-        if (AlienPassengerScene is not null)
+        // Kick off the alien flee sequence.  AlienPassenger is an inline child
+        // of Boss.tscn; Detach() reparents it to Level01 so it survives QueueFree.
+        var alien = GetNodeOrNull<AlienPassenger>("AlienPassenger");
+        if (alien is not null)
         {
-            GD.Print("Boss: AlienPassengerScene assigned — implement flee in TICKET-606.");
+            alien.Detach();
         }
         else
         {
-            // No alien scene assigned yet — emit a good ending immediately
-            // so the win screen fires during Slice 5 testing.
+            // Fallback: AlienPassenger node missing — emit good ending immediately.
+            GD.PushWarning("Boss: AlienPassenger node not found — emitting good ending stub.");
             EventBus.Instance.EmitSignal(EventBus.SignalName.LevelComplete, true);
         }
 
-        // Start the Demagogue's fall animation (Slice 11).
-        // For now, free the boss node after a short delay.
+        // Free the Boss root after a short delay (Slice 11 replaces this with
+        // a defeat animation signal).
         GetTree().CreateTimer(1.0).Timeout += QueueFree;
     }
 

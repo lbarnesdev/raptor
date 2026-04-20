@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://raptor0shuriken01"]
+[gd_scene format=3 uid="uid://d1hhnns205nlw"]
 
 ; ── External resources ────────────────────────────────────────────────────────
 [ext_resource type="Script" path="res://src/Projectiles/HateShuriken.cs" id="1_shuriken"]
