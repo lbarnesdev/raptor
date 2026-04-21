@@ -1,0 +1,29 @@
+; scenes/projectiles/PlasmaBlob.tscn
+; ─────────────────────────────────────────────────────────────────────────────
+; Wraith Fighter projectile. Medium bioluminescent green blob. PRD F-204.
+;
+; Collision (collision_layer=32 = EnemyProjectile, layer 6):
+;   collision_mask = 6  (PlayerShield=4 + Player=2)
+;   ShieldArea intercepts via area_entered before Player body_entered (ADR-005).
+; ─────────────────────────────────────────────────────────────────────────────
+[gd_scene format=3 uid="uid://raptor0plasmablob01"]
+
+[ext_resource type="Script" path="res://src/Projectiles/PlasmaBlob.cs" id="1_plasmablob"]
+
+; Collision shape — circle 18 px radius.
+[sub_resource type="CircleShape2D" id="1_shape"]
+radius = 18.0
+
+[node name="PlasmaBlob" type="Area2D"]
+collision_layer = 32
+collision_mask = 6
+script = ExtResource("1_plasmablob")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("1_shape")
+
+; Placeholder visual — medium green blob, octagon ~18 px radius.
+; 8-point polygon at 45° intervals.
+[node name="PlaceholderShape" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(18, 0, 12.73, 12.73, 0, 18, -12.73, 12.73, -18, 0, -12.73, -12.73, 0, -18, 12.73, -12.73)
+color = Color(0.2, 0.9, 0.3, 0.9)

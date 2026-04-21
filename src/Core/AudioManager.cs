@@ -101,6 +101,7 @@ public partial class AudioManager : Node
         public const string ShieldBreak     = "shield_break";
         public const string ShieldRecharge  = "shield_recharge";
         public const string PlayerDeath     = "player_death";
+        public const string EnemyShoot      = "enemy_shoot";
         public const string EnemyExplode    = "enemy_explode";
         public const string TurretExplode   = "turret_explode";
         public const string BossHit         = "boss_hit";
@@ -269,6 +270,7 @@ public partial class AudioManager : Node
         TryLoadSfx(Sfx.ShieldBreak,    "res://assets/audio/sfx/shield_break.wav");
         TryLoadSfx(Sfx.ShieldRecharge, "res://assets/audio/sfx/shield_recharge.wav");
         TryLoadSfx(Sfx.PlayerDeath,    "res://assets/audio/sfx/player_death.wav");
+        TryLoadSfx(Sfx.EnemyShoot,     "res://assets/audio/sfx/enemy_shoot.wav");
         TryLoadSfx(Sfx.EnemyExplode,   "res://assets/audio/sfx/enemy_explode.wav");
         TryLoadSfx(Sfx.TurretExplode,  "res://assets/audio/sfx/turret_explode.wav");
         TryLoadSfx(Sfx.BossHit,        "res://assets/audio/sfx/boss_hit.wav");

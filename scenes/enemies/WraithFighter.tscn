@@ -1,0 +1,29 @@
+; scenes/enemies/WraithFighter.tscn
+; ─────────────────────────────────────────────────────────────────────────────
+; J-20 variant with alien bioluminescent possession. PRD F-201–206.
+;
+; Collision:
+;   collision_layer = 8   (Enemy, layer 4)
+;   collision_mask  = 0   (movement handled by MoveAndCollide in code)
+; ─────────────────────────────────────────────────────────────────────────────
+[gd_scene format=3 uid="uid://raptor0wraith01"]
+
+[ext_resource type="Script" path="res://src/Enemies/WraithFighter.cs" id="1_wraith"]
+
+; Collision shape — wide body, 56 × 28 px.
+[sub_resource type="RectangleShape2D" id="1_shape"]
+size = Vector2(56, 28)
+
+[node name="WraithFighter" type="CharacterBody2D"]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("1_wraith")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("1_shape")
+
+; Placeholder visual — orange-red swept-wing wedge pointing left.
+; Larger than BasicEnemy wedge; bioluminescent green tint will be added in Slice 11.
+[node name="PlaceholderShape" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-28, 0, 28, -14, 14, 0, 28, 14)
+color = Color(0.9, 0.2, 0.05, 1.0)

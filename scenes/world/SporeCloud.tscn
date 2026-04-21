@@ -1,0 +1,30 @@
+; scenes/world/SporeCloud.tscn
+; ─────────────────────────────────────────────────────────────────────────────
+; Lingering hazard dropped by SpecterFighter. PRD F-214.
+;
+; Collision:
+;   collision_layer = 128  (Hazard, layer 8)
+;   collision_mask  = 2    (Player, layer 2)
+;
+; BodyEntered routes to SporeCloud.OnBodyEntered → Player.Die().
+; ─────────────────────────────────────────────────────────────────────────────
+[gd_scene format=3 uid="uid://raptor0sporecloud01"]
+
+[ext_resource type="Script" path="res://src/World/SporeCloud.cs" id="1_sporecloud"]
+
+; Collision shape — large circle, 60 px radius.
+[sub_resource type="CircleShape2D" id="1_shape"]
+radius = 60.0
+
+[node name="SporeCloud" type="Area2D"]
+collision_layer = 128
+collision_mask = 2
+script = ExtResource("1_sporecloud")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("1_shape")
+
+; Placeholder visual — semi-transparent purple circle, 16-point polygon ~60 px radius.
+[node name="PlaceholderShape" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(60, 0, 55.43, 22.96, 42.43, 42.43, 22.96, 55.43, 0, 60, -22.96, 55.43, -42.43, 42.43, -55.43, 22.96, -60, 0, -55.43, -22.96, -42.43, -42.43, -22.96, -55.43, 0, -60, 22.96, -55.43, 42.43, -42.43, 55.43, -22.96)
+color = Color(0.55, 0.1, 0.75, 0.45)

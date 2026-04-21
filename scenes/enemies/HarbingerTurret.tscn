@@ -1,0 +1,45 @@
+; scenes/enemies/HarbingerTurret.tscn
+; ─────────────────────────────────────────────────────────────────────────────
+; Stationary ground-mounted turret. PRD F-221–225.
+;
+; Placed manually in Level01 editor — NOT spawned by LevelDirector waves.
+;
+; Collision:
+;   StaticBody2D child (EnemyBody):
+;     collision_layer = 8   (Enemy, layer 4)
+;     collision_mask  = 0
+;
+; HarbingerTurret root is a plain Node2D.
+; The Barrel child is rotated toward the player each frame by HarbingerTurret.cs.
+; ─────────────────────────────────────────────────────────────────────────────
+[gd_scene format=3 uid="uid://raptor0harbinger01"]
+
+[ext_resource type="Script" path="res://src/Enemies/HarbingerTurret.cs" id="1_turret"]
+
+; Collision shape for the turret body — square ~36 × 36 px.
+[sub_resource type="RectangleShape2D" id="1_bodyshape"]
+size = Vector2(36, 36)
+
+[node name="HarbingerTurret" type="Node2D"]
+script = ExtResource("1_turret")
+
+; ── Body (static, receives player projectile hits via BodyEntered) ────────────
+[node name="EnemyBody" type="StaticBody2D" parent="."]
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyBody"]
+shape = SubResource("1_bodyshape")
+
+; Placeholder visual — coral-orange square base.
+[node name="PlaceholderBase" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-18, -18, 18, -18, 18, 18, -18, 18)
+color = Color(1.0, 0.45, 0.15, 1.0)
+
+; ── Barrel (rotated toward player by HarbingerTurret._Process) ───────────────
+; Pivots at turret center; visual tip is ~20 px along +X axis.
+[node name="Barrel" type="Node2D" parent="."]
+
+[node name="BarrelVisual" type="Polygon2D" parent="Barrel"]
+polygon = PackedVector2Array(0, -3, 20, -2, 20, 2, 0, 3)
+color = Color(0.7, 0.3, 0.1, 1.0)

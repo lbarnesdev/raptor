@@ -1,0 +1,35 @@
+; scenes/enemies/SpecterFighter.tscn
+; ─────────────────────────────────────────────────────────────────────────────
+; Su-57 variant with red crystalline alien possession. PRD F-211–215.
+;
+; SporeCloudScene is baked in here so dynamically-spawned SpecterFighters
+; (via LevelDirector) always have the correct scene reference without needing
+; per-instance Inspector wiring.
+;
+; Collision:
+;   collision_layer = 8   (Enemy, layer 4)
+;   collision_mask  = 0
+; ─────────────────────────────────────────────────────────────────────────────
+[gd_scene format=3 uid="uid://raptor0specter01"]
+
+[ext_resource type="Script" path="res://src/Enemies/SpecterFighter.cs" id="1_specter"]
+[ext_resource type="PackedScene" uid="uid://raptor0sporecloud01" path="res://scenes/world/SporeCloud.tscn" id="2_sporecloud"]
+
+; Collision shape — sleek narrow body, 56 × 20 px.
+[sub_resource type="RectangleShape2D" id="1_shape"]
+size = Vector2(56, 20)
+
+[node name="SpecterFighter" type="CharacterBody2D"]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("1_specter")
+SporeCloudScene = ExtResource("2_sporecloud")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("1_shape")
+
+; Placeholder visual — dark maroon narrow angular shape pointing left.
+; Narrower and sharper than WraithFighter to suggest the Su-57's twin-tail silhouette.
+[node name="PlaceholderShape" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-28, 0, 28, -10, 20, 0, 28, 10)
+color = Color(0.55, 0.05, 0.1, 1.0)

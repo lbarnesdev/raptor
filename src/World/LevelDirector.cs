@@ -10,14 +10,16 @@
 // Data file:
 //   res://data/level_01_waves.json — loaded once in _Ready via FileAccess.
 //
-// Supported TimelineEventType values (Slices 4–5):
-//   SpawnWave          — instantiates BasicEnemyScene N times in a formation
+// Supported TimelineEventType values (Slices 4–8):
+//   SpawnWave          — instantiates the correct enemy scene N times in a formation;
+//                        routes "WraithFighter" / "SpecterFighter" / "BasicEnemy"
+//                        to their respective [Export] PackedScene properties.
 //   StopScroll         — sets ScrollCamera.IsStopped = true
 //   DespawnAllEnemies  — QueueFrees every node in the "enemies" group
 //   SpawnBoss          — instantiates BossScene, positions it, calls StartBoss()
-//
-// RegisterCheckpoint — implemented in Slice 7 (TICKET-703).
-// CrossfadeMusic     — recognised but no-op'd with a warning until Slice 8.
+//   RegisterCheckpoint — calls CheckpointManager.Instance.RegisterCheckpoint(index)
+//   CrossfadeMusic     — recognised but no-op'd with a GD.Print until AudioManager
+//                        CrossfadeMusic is implemented (Slice 10).
 //
 // Formations (SpawnWave "formation" param):
 //   "line" — N enemies at equal vertical spacing, same X
@@ -41,10 +43,22 @@ public partial class LevelDirector : Node
     // ── Exported scene references (set in Godot Inspector) ───────────────────
 
     /// <summary>
-    /// Scene to instantiate for SpawnWave events with <c>"enemy": "BasicEnemy"</c>.
+    /// Fallback / legacy enemy scene (<c>"enemy": "BasicEnemy"</c> in JSON).
     /// Assign <c>scenes/enemies/BasicEnemy.tscn</c> in the Inspector.
     /// </summary>
     [Export] public PackedScene BasicEnemyScene { get; set; } = null!;
+
+    /// <summary>
+    /// J-20 Wraith Fighter (<c>"enemy": "WraithFighter"</c> in JSON).
+    /// Assign <c>scenes/enemies/WraithFighter.tscn</c> in the Inspector.
+    /// </summary>
+    [Export] public PackedScene WraithFighterScene { get; set; } = null!;
+
+    /// <summary>
+    /// Su-57 Specter Fighter (<c>"enemy": "SpecterFighter"</c> in JSON).
+    /// Assign <c>scenes/enemies/SpecterFighter.tscn</c> in the Inspector.
+    /// </summary>
+    [Export] public PackedScene SpecterFighterScene { get; set; } = null!;
 
     /// <summary>
     /// Scene to instantiate when the <c>SpawnBoss</c> timeline event fires at t=162s.
@@ -159,6 +173,23 @@ public partial class LevelDirector : Node
         float  yCenter   = GetFloat(p, "y",         540f);
         float  spread    = GetFloat(p, "spread",    300f);
         string formation = GetStr  (p, "formation", "line");
+        string enemyType = GetStr  (p, "enemy",     "BasicEnemy");
+
+        // Resolve the correct PackedScene for this enemy type.
+        PackedScene? scene = enemyType switch
+        {
+            "WraithFighter"  => WraithFighterScene,
+            "SpecterFighter" => SpecterFighterScene,
+            _                => BasicEnemyScene,    // "BasicEnemy" and any unknown type
+        };
+
+        if (scene is null)
+        {
+            GD.PushWarning(
+                $"LevelDirector: PackedScene for enemy type '{enemyType}' is not " +
+                $"assigned in the Inspector. Wave skipped.");
+            return;
+        }
 
         // Enemies spawn just past the right edge of the current camera view.
         float spawnX = _camera.GlobalPosition.X + _viewHalfWidth + 200f;
@@ -167,13 +198,7 @@ public partial class LevelDirector : Node
 
         foreach (var pos in positions)
         {
-            if (BasicEnemyScene is null)
-            {
-                GD.PushWarning("LevelDirector: BasicEnemyScene not assigned in Inspector.");
-                return;
-            }
-
-            var enemy = BasicEnemyScene.Instantiate<Node2D>();
+            var enemy = scene.Instantiate<Node2D>();
             _enemyContainer.AddChild(enemy);
             enemy.GlobalPosition = pos;
         }
