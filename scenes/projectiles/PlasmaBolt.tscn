@@ -5,9 +5,10 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/projectiles/plasma_bolt_player.png" id="2_tex"]
 
 ; ── Collision shape ───────────────────────────────────────────────────────────
-; Elongated rectangle matching the visual — 16 px wide, 4 px tall.
+; Slightly smaller than the rendered visual (scaled sprite is ~64×24 px) for
+; forgiving hit detection — keeps gameplay feeling fair.
 [sub_resource type="RectangleShape2D" id="1_boltshape"]
-size = Vector2(16, 4)
+size = Vector2(28, 8)
 
 ; ── Scene tree ────────────────────────────────────────────────────────────────
 ; Collision layers (project.godot layer names):
@@ -23,5 +24,7 @@ script = ExtResource("1_bolt")
 shape = SubResource("1_boltshape")
 
 ; Sprite — cyan plasma bolt (Slice 11 art).
+; scale 2× on each axis → ~64×24 px rendered size, clearly visible in-game.
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_tex")
+scale = Vector2(2.0, 2.0)

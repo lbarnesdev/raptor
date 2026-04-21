@@ -14,10 +14,11 @@
 [ext_resource type="Script" path="res://src/Projectiles/Missile.cs" id="1_missile"]
 [ext_resource type="Texture2D" path="res://assets/sprites/projectiles/missile_body.png" id="2_tex"]
 
-; Collision shape — elongated capsule 32 × 8 px, wider than a plasma bolt.
+; Collision shape — sized to match rendered sprite (~100×30 px after 2.5× scale).
+; Using a slightly conservative box so near-misses feel fair.
 [sub_resource type="CapsuleShape2D" id="1_shape"]
-radius = 4.0
-height = 32.0
+radius = 6.0
+height = 44.0
 
 [node name="Missile" type="Area2D"]
 collision_layer = 16
@@ -29,5 +30,7 @@ shape = SubResource("1_shape")
 rotation = 1.5708
 
 ; Sprite — bright yellow homing missile body (Slice 11 art).
+; scale 2.5× on each axis → ~100×30 px rendered size, clearly visible in-game.
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_tex")
+scale = Vector2(2.5, 2.5)
