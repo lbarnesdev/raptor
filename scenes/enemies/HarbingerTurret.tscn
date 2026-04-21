@@ -12,9 +12,12 @@
 ; HarbingerTurret root is a plain Node2D.
 ; The Barrel child is rotated toward the player each frame by HarbingerTurret.cs.
 ; ─────────────────────────────────────────────────────────────────────────────
-[gd_scene format=3 uid="uid://raptor0harbinger01"]
+[gd_scene load_steps=5 format=3 uid="uid://raptor0harbinger01"]
 
 [ext_resource type="Script" path="res://src/Enemies/HarbingerTurret.cs" id="1_turret"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/harbinger_turret_idle.png" id="2_basetex"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/harbinger_turret_firing.png" id="3_firetex"]
+[ext_resource type="PackedScene" uid="uid://raptor0explsmall01" path="res://scenes/fx/ExplosionSmall.tscn" id="4_expl"]
 
 ; Collision shape for the turret body — square ~36 × 36 px.
 [sub_resource type="RectangleShape2D" id="1_bodyshape"]
@@ -22,6 +25,7 @@ size = Vector2(36, 36)
 
 [node name="HarbingerTurret" type="Node2D"]
 script = ExtResource("1_turret")
+ExplosionScene = ExtResource("4_expl")
 
 ; ── Body (static, receives player projectile hits via BodyEntered) ────────────
 [node name="EnemyBody" type="StaticBody2D" parent="."]
@@ -31,15 +35,14 @@ collision_mask = 0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyBody"]
 shape = SubResource("1_bodyshape")
 
-; Placeholder visual — coral-orange square base.
-[node name="PlaceholderBase" type="Polygon2D" parent="."]
-polygon = PackedVector2Array(-18, -18, 18, -18, 18, 18, -18, 18)
-color = Color(1.0, 0.45, 0.15, 1.0)
+; Base sprite — organic coral turret body (Slice 11 art).
+[node name="BaseSprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_basetex")
 
 ; ── Barrel (rotated toward player by HarbingerTurret._Process) ───────────────
-; Pivots at turret center; visual tip is ~20 px along +X axis.
+; Pivots at turret center; tip is ~20 px along +X axis.
 [node name="Barrel" type="Node2D" parent="."]
 
-[node name="BarrelVisual" type="Polygon2D" parent="Barrel"]
-polygon = PackedVector2Array(0, -3, 20, -2, 20, 2, 0, 3)
-color = Color(0.7, 0.3, 0.1, 1.0)
+; Barrel sprite shows the firing-state texture (Slice 11 art).
+[node name="BarrelVisual" type="Sprite2D" parent="Barrel"]
+texture = ExtResource("3_firetex")

@@ -10,10 +10,24 @@
 ;   collision_layer = 8   (Enemy, layer 4)
 ;   collision_mask  = 0
 ; ─────────────────────────────────────────────────────────────────────────────
-[gd_scene format=3 uid="uid://raptor0specter01"]
+[gd_scene load_steps=6 format=3 uid="uid://raptor0specter01"]
 
 [ext_resource type="Script" path="res://src/Enemies/SpecterFighter.cs" id="1_specter"]
 [ext_resource type="PackedScene" uid="uid://raptor0sporecloud01" path="res://scenes/world/SporeCloud.tscn" id="2_sporecloud"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/specter_fighter_idle.png" id="3_idletex"]
+[ext_resource type="PackedScene" uid="uid://raptor0explsmall01" path="res://scenes/fx/ExplosionSmall.tscn" id="4_expl"]
+
+; SpriteFrames: single "idle" animation (Slice 11 art).
+[sub_resource type="SpriteFrames" id="2_frames"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_idletex")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
 
 ; Collision shape — sleek narrow body, 56 × 20 px.
 [sub_resource type="RectangleShape2D" id="1_shape"]
@@ -24,12 +38,13 @@ collision_layer = 8
 collision_mask = 0
 script = ExtResource("1_specter")
 SporeCloudScene = ExtResource("2_sporecloud")
+ExplosionScene = ExtResource("4_expl")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("1_shape")
 
-; Placeholder visual — dark maroon narrow angular shape pointing left.
-; Narrower and sharper than WraithFighter to suggest the Su-57's twin-tail silhouette.
-[node name="PlaceholderShape" type="Polygon2D" parent="."]
-polygon = PackedVector2Array(-28, 0, 28, -10, 20, 0, 28, 10)
-color = Color(0.55, 0.05, 0.1, 1.0)
+; Sprite — red crystalline Su-57 (Slice 11 art).
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("2_frames")
+animation = &"idle"
+autoplay = "idle"

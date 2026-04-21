@@ -6,9 +6,10 @@
 ;   collision_mask = 6  (PlayerShield=4 + Player=2)
 ;   ShieldArea intercepts via area_entered before Player body_entered (ADR-005).
 ; ─────────────────────────────────────────────────────────────────────────────
-[gd_scene format=3 uid="uid://raptor0crystalspine01"]
+[gd_scene load_steps=3 format=3 uid="uid://raptor0crystalspine01"]
 
 [ext_resource type="Script" path="res://src/Projectiles/CrystalSpine.cs" id="1_crystalspine"]
+[ext_resource type="Texture2D" path="res://assets/sprites/projectiles/crystal_spine_specter.png" id="2_tex"]
 
 ; Collision shape — narrow rectangle 20 × 4 px.
 [sub_resource type="RectangleShape2D" id="1_shape"]
@@ -22,7 +23,6 @@ script = ExtResource("1_crystalspine")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("1_shape")
 
-; Placeholder visual — narrow red shard ~20 × 4 px.
-[node name="PlaceholderShape" type="Polygon2D" parent="."]
-polygon = PackedVector2Array(-10, -2, 10, -2, 10, 2, -10, 2)
-color = Color(0.9, 0.1, 0.1, 1.0)
+; Sprite — red crystalline shard (Slice 11 art).
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_tex")

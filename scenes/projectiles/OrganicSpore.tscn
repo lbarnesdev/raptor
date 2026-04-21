@@ -9,9 +9,10 @@
 ;   collision_mask = 6  (PlayerShield=4 + Player=2)
 ;   ShieldArea intercepts via area_entered before Player body_entered (ADR-005).
 ; ─────────────────────────────────────────────────────────────────────────────
-[gd_scene format=3 uid="uid://raptor0organicspore01"]
+[gd_scene load_steps=3 format=3 uid="uid://raptor0organicspore01"]
 
 [ext_resource type="Script" path="res://src/Projectiles/OrganicSpore.cs" id="1_organicspore"]
+[ext_resource type="Texture2D" path="res://assets/sprites/projectiles/organic_spore_turret.png" id="2_tex"]
 
 ; Collision shape — circle 22 px radius.
 [sub_resource type="CircleShape2D" id="1_shape"]
@@ -25,8 +26,6 @@ script = ExtResource("1_organicspore")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("1_shape")
 
-; Placeholder visual — large coral-orange blob, octagon ~22 px radius.
-; 8-point polygon at 45° intervals.
-[node name="PlaceholderShape" type="Polygon2D" parent="."]
-polygon = PackedVector2Array(22, 0, 15.56, 15.56, 0, 22, -15.56, 15.56, -22, 0, -15.56, -15.56, 0, -22, 15.56, -15.56)
-color = Color(1.0, 0.5, 0.2, 0.95)
+; Sprite — coral-orange organic blob (Slice 11 art).
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_tex")

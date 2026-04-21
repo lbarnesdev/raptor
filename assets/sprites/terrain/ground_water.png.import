@@ -1,3 +1,40 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:26169fb227b3913e7741e04407eb7f1fb07d95ca36ff46ec5ab3b7cc09d9a1f3
-size 963
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://b88al3ly6wule"
+path="res://.godot/imported/ground_water.png-e11311e45f54dd4f8503508eb38d931c.ctex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://assets/sprites/terrain/ground_water.png"
+dest_files=["res://.godot/imported/ground_water.png-e11311e45f54dd4f8503508eb38d931c.ctex"]
+
+[params]
+
+compress/mode=0
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/uastc_level=0
+compress/rdo_quality_loss=0.0
+compress/hdr_compression=1
+compress/normal_map=0
+compress/channel_pack=0
+mipmaps/generate=false
+mipmaps/limit=-1
+roughness/mode=0
+roughness/src_normal=""
+process/channel_remap/red=0
+process/channel_remap/green=1
+process/channel_remap/blue=2
+process/channel_remap/alpha=3
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=1

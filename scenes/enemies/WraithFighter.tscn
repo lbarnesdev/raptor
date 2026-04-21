@@ -6,9 +6,23 @@
 ;   collision_layer = 8   (Enemy, layer 4)
 ;   collision_mask  = 0   (movement handled by MoveAndCollide in code)
 ; ─────────────────────────────────────────────────────────────────────────────
-[gd_scene format=3 uid="uid://raptor0wraith01"]
+[gd_scene load_steps=5 format=3 uid="uid://raptor0wraith01"]
 
 [ext_resource type="Script" path="res://src/Enemies/WraithFighter.cs" id="1_wraith"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/wraith_fighter_idle.png" id="2_idletex"]
+[ext_resource type="PackedScene" uid="uid://raptor0explsmall01" path="res://scenes/fx/ExplosionSmall.tscn" id="3_expl"]
+
+; SpriteFrames: single "idle" animation (Slice 11 art).
+[sub_resource type="SpriteFrames" id="2_frames"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_idletex")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
 
 ; Collision shape — wide body, 56 × 28 px.
 [sub_resource type="RectangleShape2D" id="1_shape"]
@@ -18,12 +32,13 @@ size = Vector2(56, 28)
 collision_layer = 8
 collision_mask = 0
 script = ExtResource("1_wraith")
+ExplosionScene = ExtResource("3_expl")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("1_shape")
 
-; Placeholder visual — orange-red swept-wing wedge pointing left.
-; Larger than BasicEnemy wedge; bioluminescent green tint will be added in Slice 11.
-[node name="PlaceholderShape" type="Polygon2D" parent="."]
-polygon = PackedVector2Array(-28, 0, 28, -14, 14, 0, 28, 14)
-color = Color(0.9, 0.2, 0.05, 1.0)
+; Sprite — bioluminescent J-20 (Slice 11 art).
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("2_frames")
+animation = &"idle"
+autoplay = "idle"

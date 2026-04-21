@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://raptor0player01"]
+[gd_scene load_steps=12 format=3 uid="uid://raptor0player01"]
 
 ; ── External scripts ──────────────────────────────────────────────────────────
 [ext_resource type="Script" path="res://src/Player/Player.cs" id="1_player"]
@@ -6,9 +6,36 @@
 [ext_resource type="Script" path="res://src/Player/PlasmaWeapon.cs" id="3_plasma"]
 [ext_resource type="Script" path="res://src/Player/MissileWeapon.cs" id="4_missile"]
 
+; ── Sprite textures ───────────────────────────────────────────────────────────
+[ext_resource type="Texture2D" path="res://assets/sprites/player/player_idle.png" id="5_idletex"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/player_thrust.png" id="6_thrusttex"]
+
+; ── SpriteFrames ─────────────────────────────────────────────────────────────
+; Two animations: "idle" (looping, 5 fps) and "thrust" (looping, 8 fps).
+; Player.cs does not call sprite.Play() directly — the AnimatedSprite2D
+; autoplays "idle" on load.  Add C# code to switch to "thrust" on input if desired.
+[sub_resource type="SpriteFrames" id="5_frames"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_idletex")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_thrusttex")
+}],
+"loop": true,
+"name": &"thrust",
+"speed": 8.0
+}]
+
 ; ── Animations ───────────────────────────────────────────────────────────────
-; hurt_flash: flickers the Player node's modulate alpha 0→1 over 0.5 s (3 pulses).
-; AnimationPlayer's root_node is set to ".." so it can target Player's modulate.
+; hurt_flash: flickers AnimatedSprite2D modulate red/transparent over 0.5 s (3 pulses)
+; then restores to normal white.
 [sub_resource type="Animation" id="3_hurtanim"]
 resource_name = "hurt_flash"
 length = 0.5
@@ -16,14 +43,14 @@ loop_mode = 0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("../PlaceholderShape:modulate")
+tracks/0/path = NodePath("../AnimatedSprite2D:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = false
 tracks/0/keys = {
 "times": PackedFloat32Array(0.0, 0.083, 0.166, 0.25, 0.333, 0.416, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Color(1, 0.3, 0.3, 0.0), Color(1, 0.3, 0.3, 1.0), Color(1, 0.3, 0.3, 0.0), Color(1, 0.3, 0.3, 1.0), Color(1, 0.3, 0.3, 0.0), Color(1, 0.3, 0.3, 1.0), Color(0.2, 0.6, 1.0, 1.0)]
+"values": [Color(1, 0.3, 0.3, 0.0), Color(1, 0.3, 0.3, 1.0), Color(1, 0.3, 0.3, 0.0), Color(1, 0.3, 0.3, 1.0), Color(1, 0.3, 0.3, 0.0), Color(1, 0.3, 0.3, 1.0), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="4_animlib"]
@@ -56,17 +83,13 @@ script = ExtResource("1_player")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("1_bodyshape")
 
-; ── Sprite (placeholder) ───────────────────────────────────────────────────────
-; AnimatedSprite2D with no SpriteFrames assigned shows nothing.
-; Replace with player_idle.png / player_thrust.png when art is ready (Slice 6).
+; ── Sprite ────────────────────────────────────────────────────────────────────
+; AnimatedSprite2D with real SpriteFrames (Slice 11).  Autoplays "idle".
+; HurtFlash animation targets this node's modulate for the red-flash hit feedback.
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-
-; ── Slice 1 placeholder visual ────────────────────────────────────────────────
-; Simple arrow polygon so the player is visible without any sprite assets.
-; Delete this node when AnimatedSprite2D has real frames (Slice 6).
-[node name="PlaceholderShape" type="Polygon2D" parent="."]
-polygon = PackedVector2Array(-35, -12, 10, -12, 35, 0, 10, 12, -35, 12, -22, 0)
-color = Color(0.2, 0.6, 1, 1)
+sprite_frames = SubResource("5_frames")
+animation = &"idle"
+autoplay = "idle"
 
 ; ── Shield ─────────────────────────────────────────────────────────────────────
 [node name="ShieldController" type="Node" parent="."]
@@ -92,19 +115,19 @@ modulate = Color(0.3, 0.7, 1.0, 0.8)
 [node name="PlasmaWeapon" type="Node2D" parent="."]
 script = ExtResource("3_plasma")
 
-; MuzzlePoint sits at the nose of the placeholder shape (x=35 → right edge)
+; MuzzlePoint sits at the nose of the ship (x=40 → right edge of ~80 px sprite)
 [node name="MuzzlePoint" type="Marker2D" parent="PlasmaWeapon"]
-position = Vector2(35, 0)
+position = Vector2(40, 0)
 
 ; ── Missile weapon ─────────────────────────────────────────────────────────────
 [node name="MissileWeapon" type="Node2D" parent="."]
 script = ExtResource("4_missile")
 
 [node name="MuzzlePoint" type="Marker2D" parent="MissileWeapon"]
-position = Vector2(35, 0)
+position = Vector2(40, 0)
 
 ; ── Hurt flash ─────────────────────────────────────────────────────────────────
-; Flickers PlaceholderShape modulate red/transparent on hit, returns to blue.
+; Flickers AnimatedSprite2D modulate red/transparent on hit, returns to white.
 ; Player.Die() calls: GetNode<AnimationPlayer>("HurtFlash").Play("hurt_flash")
 [node name="HurtFlash" type="AnimationPlayer" parent="."]
 libraries = {

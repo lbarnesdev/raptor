@@ -1,3 +1,40 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:95373cc0012a91b4d04f4068ebe4ac21c17819b2dcda1f57c791a0f3761418c6
-size 987
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://bujwtqdfnyb2o"
+path="res://.godot/imported/wraith_fighter_death.png-1b568940364e0da7fa3ba1414576ea83.ctex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://assets/sprites/enemies/wraith_fighter_death.png"
+dest_files=["res://.godot/imported/wraith_fighter_death.png-1b568940364e0da7fa3ba1414576ea83.ctex"]
+
+[params]
+
+compress/mode=0
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/uastc_level=0
+compress/rdo_quality_loss=0.0
+compress/hdr_compression=1
+compress/normal_map=0
+compress/channel_pack=0
+mipmaps/generate=false
+mipmaps/limit=-1
+roughness/mode=0
+roughness/src_normal=""
+process/channel_remap/red=0
+process/channel_remap/green=1
+process/channel_remap/blue=2
+process/channel_remap/alpha=3
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=1

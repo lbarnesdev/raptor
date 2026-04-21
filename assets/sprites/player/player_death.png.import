@@ -1,3 +1,40 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7bf92232a4cb93c8bf5a1f69a3b61d86824013e4852e25b1e59c1af88d2a8f2c
-size 962
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://bidt77sapxxyk"
+path="res://.godot/imported/player_death.png-dc15b8b842d6fa2455369f998413fbdd.ctex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://assets/sprites/player/player_death.png"
+dest_files=["res://.godot/imported/player_death.png-dc15b8b842d6fa2455369f998413fbdd.ctex"]
+
+[params]
+
+compress/mode=0
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/uastc_level=0
+compress/rdo_quality_loss=0.0
+compress/hdr_compression=1
+compress/normal_map=0
+compress/channel_pack=0
+mipmaps/generate=false
+mipmaps/limit=-1
+roughness/mode=0
+roughness/src_normal=""
+process/channel_remap/red=0
+process/channel_remap/green=1
+process/channel_remap/blue=2
+process/channel_remap/alpha=3
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=1

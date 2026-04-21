@@ -21,6 +21,11 @@
 // Group membership:
 //   _Ready() calls AddToGroup("enemies") so MissileWeapon can find live enemies
 //   when computing homing targets.
+//
+// Explosion VFX (Slice 11):
+//   Die() instantiates SmallExplosionScene into EffectsContainer at the enemy's
+//   GlobalPosition, then QueueFrees itself.  SmallExplosionScene is a PackedScene
+//   [Export] so it can be set in the Inspector (defaulted in _Ready if null).
 // ─────────────────────────────────────────────────────────────────────────────
 
 using Godot;
@@ -43,6 +48,13 @@ public partial class BaseEnemy : CharacterBody2D
     /// Base score awarded on death (before GameManager applies the multiplier).
     /// </summary>
     [Export] public int ScoreValue { get; set; } = 100;
+
+    /// <summary>
+    /// Explosion VFX scene instantiated at death.
+    /// Assign <c>scenes/fx/ExplosionSmall.tscn</c> in the Inspector (or per-enemy
+    /// subclass .tscn) to get visuals.  Silently skipped if null.
+    /// </summary>
+    [Export] public PackedScene? ExplosionScene { get; set; }
 
     // ── Private state ────────────────────────────────────────────────────────
 
@@ -80,8 +92,28 @@ public partial class BaseEnemy : CharacterBody2D
     {
         // Award score via GameManager — keeps ScoreSystem off the enemy.
         GameManager.Instance.OnEnemyKilled(ScoreValue);
+        AudioManager.Instance?.PlaySfx(AudioManager.Sfx.EnemyExplode);
 
-        // TODO (Slice 4): play death animation / spawn explosion VFX before freeing.
+        // Spawn explosion VFX into EffectsContainer (Slice 11).
+        SpawnExplosion();
+
         QueueFree();
+    }
+
+    /// <summary>
+    /// Instantiates <see cref="ExplosionScene"/> into the level's EffectsContainer
+    /// at this enemy's current GlobalPosition.  Silently skips if the scene is
+    /// unassigned or the container cannot be found.
+    /// </summary>
+    protected void SpawnExplosion()
+    {
+        if (ExplosionScene is null) return;
+
+        var container = GetNodeOrNull<Node2D>("/root/Level01/EffectsContainer");
+        if (container is null) return;
+
+        var vfx = ExplosionScene.Instantiate<Node2D>();
+        container.AddChild(vfx);
+        vfx.GlobalPosition = GlobalPosition;
     }
 }

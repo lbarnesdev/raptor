@@ -1,7 +1,9 @@
-[gd_scene format=3 uid="uid://ct10vlf38ik33"]
+[gd_scene load_steps=4 format=3 uid="uid://ct10vlf38ik33"]
 
 ; ── External resources ────────────────────────────────────────────────────────
 [ext_resource type="Script" path="res://src/Enemies/BaseEnemy.cs" id="1_enemy"]
+[ext_resource type="PackedScene" uid="uid://raptor0explsmall01" path="res://scenes/fx/ExplosionSmall.tscn" id="2_expl"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/wraith_fighter_idle.png" id="3_tex"]
 
 ; ── Collision shape ───────────────────────────────────────────────────────────
 [sub_resource type="RectangleShape2D" id="1_enemyshape"]
@@ -19,12 +21,11 @@ size = Vector2(48, 32)
 collision_layer = 8
 collision_mask = 0
 script = ExtResource("1_enemy")
+ExplosionScene = ExtResource("2_expl")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("1_enemyshape")
 
-; Placeholder visual — orange wedge pointing left (enemy approaching player).
-; Replace with AnimatedSprite2D when art is ready (Slice 6).
-[node name="PlaceholderShape" type="Polygon2D" parent="."]
-polygon = PackedVector2Array(-22, 0, 22, -14, 8, 0, 22, 14)
-color = Color(1, 0.25, 0.1, 1)
+; Sprite (Slice 11) — reuse WraithFighter art as a generic enemy stand-in.
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("3_tex")

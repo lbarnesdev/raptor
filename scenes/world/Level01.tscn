@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://raptor0level001"]
+[gd_scene load_steps=25 format=3 uid="uid://raptor0level001"]
 
 ; ── External resources ────────────────────────────────────────────────────────
 [ext_resource type="Script" path="res://src/World/ScrollCamera.cs" id="1_scrollcam"]
@@ -14,6 +14,10 @@
 [ext_resource type="PackedScene" uid="uid://raptor0foxpulse01" path="res://scenes/projectiles/FoxBroadcastPulse.tscn" id="11_foxpulse"]
 [ext_resource type="PackedScene" uid="uid://raptor0shuriken01" path="res://scenes/projectiles/HateShuriken.tscn" id="12_shuriken"]
 [ext_resource type="Script" path="res://src/World/CheckpointManager.cs" id="13_checkpointmgr"]
+; ── Slice 11 additions — terrain textures for ParallaxBackground ─────────────
+[ext_resource type="Texture2D" path="res://assets/sprites/terrain/sky_bg.png" id="22_skytex"]
+[ext_resource type="Texture2D" path="res://assets/sprites/terrain/mid_land.png" id="23_midtex"]
+[ext_resource type="Texture2D" path="res://assets/sprites/terrain/ground_land.png" id="24_groundtex"]
 ; ── Slice 9 additions ─────────────────────────────────────────────────────────
 [ext_resource type="PackedScene" uid="uid://raptor0missile01" path="res://scenes/projectiles/Missile.tscn" id="21_missile"]
 ; ── Slice 8 additions ─────────────────────────────────────────────────────────
@@ -34,6 +38,8 @@
 ; Slice 8 — WraithFighter/SpecterFighter wired; enemy projectiles slots 2–4;
 ;            4 HarbingerTurrets placed along level scroll path.
 ; Slice 9 — Missile.tscn wired to ProjectilePool slot [1].
+; Slice 11— ParallaxBackground with sky/mid/ground layers; all Polygon2D
+;            placeholders replaced with real sprites in subscene files.
 ;
 ; Required node paths (referenced by GetNode in C# _Ready() methods):
 ;   /root/Level01/ScrollCamera          ← Player.cs
@@ -42,6 +48,39 @@
 ;   /root/Level01/Entities/Player       ← GameManager.cs (TODO comment)
 
 [node name="Level01" type="Node2D"]
+
+; ── Parallax Background (Slice 11) ────────────────────────────────────────────
+; Three layers scrolling at different speeds create a depth illusion.
+; motion_scale X drives how much of the camera's horizontal movement each layer follows:
+;   Sky   0.08 — almost stationary, horizon effect.
+;   Mid   0.35 — slow clouds / distant terrain.
+;   Ground 1.00 — locks with the camera so the ground tiles stay fixed.
+; mirror_x = true + a large Sprite2D tile the view horizontally without gaps.
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="SkyLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0.08, 0.0)
+motion_mirroring = Vector2(1920, 0)
+
+[node name="SkySprite" type="Sprite2D" parent="ParallaxBackground/SkyLayer"]
+texture = ExtResource("22_skytex")
+position = Vector2(960, 540)
+
+[node name="MidLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0.35, 0.0)
+motion_mirroring = Vector2(1920, 0)
+
+[node name="MidSprite" type="Sprite2D" parent="ParallaxBackground/MidLayer"]
+texture = ExtResource("23_midtex")
+position = Vector2(960, 700)
+
+[node name="GroundLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(1.0, 0.0)
+motion_mirroring = Vector2(1920, 0)
+
+[node name="GroundSprite" type="Sprite2D" parent="ParallaxBackground/GroundLayer"]
+texture = ExtResource("24_groundtex")
+position = Vector2(960, 900)
 
 ; ── Camera ─────────────────────────────────────────────────────────────────────
 ; Centred at screen midpoint. ScrollCamera.cs calls MakeCurrent() in _Ready().

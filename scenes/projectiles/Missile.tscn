@@ -9,9 +9,10 @@
 ; BodyEntered fires into Projectile.OnHit → Missile.OnHit → TakeDamage(3) + pool.
 ; Missile.cs handles homing in _PhysicsProcess — does NOT call base._PhysicsProcess.
 ; ─────────────────────────────────────────────────────────────────────────────
-[gd_scene format=3 uid="uid://raptor0missile01"]
+[gd_scene load_steps=3 format=3 uid="uid://raptor0missile01"]
 
 [ext_resource type="Script" path="res://src/Projectiles/Missile.cs" id="1_missile"]
+[ext_resource type="Texture2D" path="res://assets/sprites/projectiles/missile_body.png" id="2_tex"]
 
 ; Collision shape — elongated capsule 32 × 8 px, wider than a plasma bolt.
 [sub_resource type="CapsuleShape2D" id="1_shape"]
@@ -27,7 +28,6 @@ script = ExtResource("1_missile")
 shape = SubResource("1_shape")
 rotation = 1.5708
 
-; Placeholder visual — bright yellow elongated shard pointing right.
-[node name="PlaceholderShape" type="Polygon2D" parent="."]
-polygon = PackedVector2Array(-16, -3, 16, -3, 20, 0, 16, 3, -16, 3)
-color = Color(1.0, 0.9, 0.1, 1.0)
+; Sprite — bright yellow homing missile body (Slice 11 art).
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_tex")

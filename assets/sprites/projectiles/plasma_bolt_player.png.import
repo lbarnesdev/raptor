@@ -1,3 +1,40 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:6fc2400083c8d27b3e1e1d6f8813f38a492d202611a7dedf222f2a84188ea45d
-size 985
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://bpxp4gwcygqde"
+path="res://.godot/imported/plasma_bolt_player.png-953337c68df8fe7e335fc4f8aacde1c4.ctex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://assets/sprites/projectiles/plasma_bolt_player.png"
+dest_files=["res://.godot/imported/plasma_bolt_player.png-953337c68df8fe7e335fc4f8aacde1c4.ctex"]
+
+[params]
+
+compress/mode=0
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/uastc_level=0
+compress/rdo_quality_loss=0.0
+compress/hdr_compression=1
+compress/normal_map=0
+compress/channel_pack=0
+mipmaps/generate=false
+mipmaps/limit=-1
+roughness/mode=0
+roughness/src_normal=""
+process/channel_remap/red=0
+process/channel_remap/green=1
+process/channel_remap/blue=2
+process/channel_remap/alpha=3
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=1

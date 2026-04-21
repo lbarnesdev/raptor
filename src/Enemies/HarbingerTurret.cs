@@ -18,6 +18,7 @@
 using Godot;
 using Raptor.Core;
 using Raptor.Projectiles;
+using Raptor.World;
 
 namespace Raptor.Enemies;
 
@@ -37,6 +38,13 @@ public partial class HarbingerTurret : Node2D
 
     /// <summary>Seconds between OrganicSpore shots.</summary>
     [Export] public float FireRate { get; set; } = 2.5f;
+
+    /// <summary>
+    /// Explosion VFX scene instantiated at turret death.
+    /// Assign <c>scenes/fx/ExplosionSmall.tscn</c> in the Inspector.
+    /// Silently skipped if null.
+    /// </summary>
+    [Export] public PackedScene? ExplosionScene { get; set; }
 
     // ── Child node references ────────────────────────────────────────────────
 
@@ -145,7 +153,19 @@ public partial class HarbingerTurret : Node2D
         _fireTimer?.Stop();
 
         GameManager.Instance.OnEnemyKilled(ScoreValue);
-        AudioManager.Instance?.PlaySfx(AudioManager.Sfx.EnemyExplode);
+        AudioManager.Instance?.PlaySfx(AudioManager.Sfx.TurretExplode);
+
+        // Spawn explosion VFX (Slice 11).
+        if (ExplosionScene is not null)
+        {
+            var container = GetNodeOrNull<Node2D>("/root/Level01/EffectsContainer");
+            if (container is not null)
+            {
+                var vfx = ExplosionScene.Instantiate<Node2D>();
+                container.AddChild(vfx);
+                vfx.GlobalPosition = GlobalPosition;
+            }
+        }
 
         QueueFree();
     }
