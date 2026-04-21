@@ -53,7 +53,7 @@ public partial class HarbingerTurret : Node2D
 
     private Node2D?  _barrel;
     private Node2D?  _player;
-    private Timer?   _fireTimer;
+    private Godot.Timer? _fireTimer;
 
     // ── Lifecycle ────────────────────────────────────────────────────────────
 
@@ -67,7 +67,7 @@ public partial class HarbingerTurret : Node2D
         _player = GetNodeOrNull<Node2D>("/root/Level01/Entities/Player");
 
         // Create a Timer child for the fire cadence.
-        _fireTimer          = new Timer();
+        _fireTimer          = new Godot.Timer();
         _fireTimer.WaitTime = FireRate;
         _fireTimer.Autostart = true;
         _fireTimer.Timeout  += OnFireTimerTimeout;

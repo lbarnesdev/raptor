@@ -76,7 +76,7 @@ public partial class WraithFighter : BaseEnemy
 
     public override void _PhysicsProcess(double delta)
     {
-        switch (_fsm.Current)
+        switch (_fsm.CurrentState)
         {
             case EnemyState.FormationHold:
                 // Drift leftward at low speed.
