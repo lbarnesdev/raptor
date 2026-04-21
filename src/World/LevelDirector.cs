@@ -10,7 +10,7 @@
 // Data file:
 //   res://data/level_01_waves.json — loaded once in _Ready via FileAccess.
 //
-// Supported TimelineEventType values (Slices 4–8):
+// Supported TimelineEventType values (Slices 4–10):
 //   SpawnWave          — instantiates the correct enemy scene N times in a formation;
 //                        routes "WraithFighter" / "SpecterFighter" / "BasicEnemy"
 //                        to their respective [Export] PackedScene properties.
@@ -18,8 +18,7 @@
 //   DespawnAllEnemies  — QueueFrees every node in the "enemies" group
 //   SpawnBoss          — instantiates BossScene, positions it, calls StartBoss()
 //   RegisterCheckpoint — calls CheckpointManager.Instance.RegisterCheckpoint(index)
-//   CrossfadeMusic     — recognised but no-op'd with a GD.Print until AudioManager
-//                        CrossfadeMusic is implemented (Slice 10).
+//   CrossfadeMusic     — calls AudioManager.CrossfadeTo(track, duration).
 //
 // Formations (SpawnWave "formation" param):
 //   "line" — N enemies at equal vertical spacing, same X
@@ -88,6 +87,9 @@ public partial class LevelDirector : Node
         _viewHalfWidth  = GetViewport().GetVisibleRect().Size.X / 2f;
 
         EventBus.Instance.BossSpawnBonusWave += OnBossSpawnBonusWave;
+
+        // Start Act 1 music immediately when the level loads.
+        AudioManager.Instance?.PlayMusic(AudioManager.Music.Act1);
 
         var json = Godot.FileAccess.GetFileAsString("res://data/level_01_waves.json");
         if (string.IsNullOrEmpty(json))
@@ -158,10 +160,13 @@ public partial class LevelDirector : Node
                     GetInt(ev.Params, "index", 0));
                 break;
 
-            // ── Future slices ─────────────────────────────────────────────────
             case TimelineEventType.CrossfadeMusic:
-                GD.Print($"LevelDirector: {ev.Type} not yet implemented (future slice).");
+            {
+                string trackKey  = GetStr  (ev.Params, "track",    AudioManager.Music.Act2);
+                float  xfadeSecs = GetFloat(ev.Params, "duration", 2.0f);
+                AudioManager.Instance?.CrossfadeTo(trackKey, xfadeSecs);
                 break;
+            }
         }
     }
 
