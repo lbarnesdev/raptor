@@ -1,0 +1,33 @@
+; scenes/projectiles/Missile.tscn
+; ─────────────────────────────────────────────────────────────────────────────
+; Player homing missile. PRD F-133/134.
+;
+; Collision:
+;   collision_layer = 16  (PlayerProjectile, layer 5)
+;   collision_mask  = 72  (Enemy=8 + BossWeakPoint=64)
+;
+; BodyEntered fires into Projectile.OnHit → Missile.OnHit → TakeDamage(3) + pool.
+; Missile.cs handles homing in _PhysicsProcess — does NOT call base._PhysicsProcess.
+; ─────────────────────────────────────────────────────────────────────────────
+[gd_scene format=3 uid="uid://raptor0missile01"]
+
+[ext_resource type="Script" path="res://src/Projectiles/Missile.cs" id="1_missile"]
+
+; Collision shape — elongated capsule 32 × 8 px, wider than a plasma bolt.
+[sub_resource type="CapsuleShape2D" id="1_shape"]
+radius = 4.0
+height = 32.0
+
+[node name="Missile" type="Area2D"]
+collision_layer = 16
+collision_mask = 72
+script = ExtResource("1_missile")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("1_shape")
+rotation = 1.5708
+
+; Placeholder visual — bright yellow elongated shard pointing right.
+[node name="PlaceholderShape" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-16, -3, 16, -3, 20, 0, 16, 3, -16, 3)
+color = Color(1.0, 0.9, 0.1, 1.0)

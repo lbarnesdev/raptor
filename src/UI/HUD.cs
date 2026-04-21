@@ -82,8 +82,14 @@ public partial class HUD : CanvasLayer
     /// <summary>Life icon colour after the life has been spent.</summary>
     private static readonly Color LifeOff       = new(0.3f, 0.3f, 0.3f, 1.0f);
 
-    /// <summary>Missile icon placeholder colour (all-ready stub for Slice 9).</summary>
+    /// <summary>Missile icon colour when that slot has ammo loaded.</summary>
     private static readonly Color MissileReady  = new(1.0f, 0.9f, 0.2f, 1.0f);
+
+    /// <summary>Missile icon colour when that slot is empty (spent or never loaded).</summary>
+    private static readonly Color MissileEmpty  = new(0.25f, 0.25f, 0.25f, 1.0f);
+
+    /// <summary>Pulse colour flashed on all icons when the player tries to fire with 0 ammo.</summary>
+    private static readonly Color MissileNoAmmo = new(1.0f, 0.2f, 0.2f, 1.0f);
 
     /// <summary>Boss health segment tint when it is the active phase.</summary>
     private static readonly Color SegActive     = Colors.White;
@@ -127,10 +133,10 @@ public partial class HUD : CanvasLayer
         SetLives(3);
         _bossBar.Visible = false;
 
-        // Missile icons show yellow as an "all loaded" placeholder until
-        // Slice 9 wires up the real ammo system (TICKET-903).
+        // Missile icons start grey — MissileWeapon emits AmmoGained on _Ready()
+        // with the initial ammo count, which calls OnAmmoGained to fill them in.
         foreach (var icon in _missileIcons)
-            icon.Color = MissileReady;
+            icon.Color = MissileEmpty;
 
         // ── Subscribe ─────────────────────────────────────────────────────────
         EventBus.Instance.ScoreChanged       += OnScoreChanged;
@@ -267,11 +273,50 @@ public partial class HUD : CanvasLayer
         _ => null,
     };
 
-    // ── Missiles — stub (Slice 9 / TICKET-903) ────────────────────────────────
+    // ── Missiles (TICKET-903) ─────────────────────────────────────────────────
 
-    /// <summary>Placeholder — wired up in TICKET-903 when missile system lands.</summary>
-    private void OnMissileFired(int remaining) { /* TODO TICKET-903 */ }
+    /// <summary>
+    /// Called after the player fires a missile salvo.
+    /// Dims icons for spent ammo slots; pulses all red if ammo is now 0.
+    /// </summary>
+    private void OnMissileFired(int remaining)
+    {
+        SetMissileIcons(remaining);
 
-    /// <summary>Placeholder — wired up in TICKET-903 when missile system lands.</summary>
-    private void OnAmmoGained(int total) { /* TODO TICKET-903 */ }
+        if (remaining == 0)
+            PulseNoAmmo();
+    }
+
+    /// <summary>
+    /// Called when the player gains missile ammo (enemy kill or respawn).
+    /// Lights up the filled slots yellow.
+    /// </summary>
+    private void OnAmmoGained(int total) => SetMissileIcons(total);
+
+    /// <summary>
+    /// Fill the first <paramref name="count"/> icons yellow and grey out the rest.
+    /// </summary>
+    private void SetMissileIcons(int count)
+    {
+        for (int i = 0; i < _missileIcons.Length; i++)
+            _missileIcons[i].Color = i < count ? MissileReady : MissileEmpty;
+    }
+
+    /// <summary>
+    /// Flash all missile icons red for 0.5 s to signal empty ammo,
+    /// then restore them to grey (empty).
+    /// </summary>
+    private void PulseNoAmmo()
+    {
+        foreach (var icon in _missileIcons)
+            icon.Color = MissileNoAmmo;
+
+        var tween = CreateTween();
+        // After 0.5 s, restore to the empty colour.
+        tween.TweenCallback(Callable.From(() =>
+        {
+            foreach (var icon in _missileIcons)
+                icon.Color = MissileEmpty;
+        })).SetDelay(0.5);
+    }
 }

@@ -28,6 +28,7 @@
 
 using Godot;
 using Raptor.Logic;
+using Raptor.Player;
 
 namespace Raptor.Core;
 
@@ -69,6 +70,13 @@ public partial class GameManager : Node
     /// scene loads (GameManager is an autoload; Level01 is not).
     /// </summary>
     private readonly ScoreSystem _scoreSystem = new();
+
+    /// <summary>
+    /// Cached reference to <see cref="MissileWeapon"/> for the ammo-gain
+    /// wiring on enemy kills.  Resolved lazily in <see cref="OnEnemyKilled"/>
+    /// so it works even if the player node isn't ready when GameManager starts.
+    /// </summary>
+    private MissileWeapon? _missileWeapon;
 
     // ── Lifecycle ────────────────────────────────────────────────────────────
 
@@ -164,6 +172,13 @@ public partial class GameManager : Node
             EventBus.SignalName.ScoreChanged,
             _scoreSystem.Total,
             _scoreSystem.Multiplier);
+
+        // Award 1 missile per enemy kill.  Resolve the MissileWeapon lazily so
+        // we don't need a scene-load ordering guarantee.
+        _missileWeapon ??= GetNodeOrNull<Player.Player>(
+            "/root/Level01/Entities/Player")
+            ?.GetNodeOrNull<MissileWeapon>("MissileWeapon");
+        _missileWeapon?.GainAmmo(1);
     }
 
     /// <summary>
@@ -191,6 +206,7 @@ public partial class GameManager : Node
     {
         Instance.Lives = 3;
         Instance._scoreSystem.Reset();
+        Instance._missileWeapon = null;  // clear stale scene reference
         Instance.GetTree().ChangeSceneToFile("res://scenes/world/Level01.tscn");
     }
 

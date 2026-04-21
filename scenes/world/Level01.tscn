@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://raptor0level001"]
+[gd_scene load_steps=20 format=3 uid="uid://raptor0level001"]
 
 ; ── External resources ────────────────────────────────────────────────────────
 [ext_resource type="Script" path="res://src/World/ScrollCamera.cs" id="1_scrollcam"]
@@ -14,6 +14,8 @@
 [ext_resource type="PackedScene" uid="uid://raptor0foxpulse01" path="res://scenes/projectiles/FoxBroadcastPulse.tscn" id="11_foxpulse"]
 [ext_resource type="PackedScene" uid="uid://raptor0shuriken01" path="res://scenes/projectiles/HateShuriken.tscn" id="12_shuriken"]
 [ext_resource type="Script" path="res://src/World/CheckpointManager.cs" id="13_checkpointmgr"]
+; ── Slice 9 additions ─────────────────────────────────────────────────────────
+[ext_resource type="PackedScene" uid="uid://raptor0missile01" path="res://scenes/projectiles/Missile.tscn" id="21_missile"]
 ; ── Slice 8 additions ─────────────────────────────────────────────────────────
 [ext_resource type="PackedScene" uid="uid://raptor0wraith01" path="res://scenes/enemies/WraithFighter.tscn" id="14_wraith"]
 [ext_resource type="PackedScene" uid="uid://raptor0specter01" path="res://scenes/enemies/SpecterFighter.tscn" id="15_specter"]
@@ -31,6 +33,7 @@
 ; Slice 5 — Boss.tscn wired to LevelDirector; spawns at t=162s.
 ; Slice 8 — WraithFighter/SpecterFighter wired; enemy projectiles slots 2–4;
 ;            4 HarbingerTurrets placed along level scroll path.
+; Slice 9 — Missile.tscn wired to ProjectilePool slot [1].
 ;
 ; Required node paths (referenced by GetNode in C# _Ready() methods):
 ;   /root/Level01/ScrollCamera          ← Player.cs
@@ -84,7 +87,7 @@ script = ExtResource("3_pool")
 ;   [0] PlasmaBolt         [1] Missile (Slice 9)  [2] PlasmaBlob
 ;   [3] CrystalSpine       [4] OrganicSpore        [5] ConstitutionBlast
 ;   [6] FoxBroadcastPulse                          [7] HateShuriken
-ProjectileScenes = Array[PackedScene]([ExtResource("4_plasmabolt"), null, ExtResource("17_plasmablob"), ExtResource("18_crystalspine"), ExtResource("19_organicspore"), ExtResource("10_cblast"), ExtResource("11_foxpulse"), ExtResource("12_shuriken")])
+ProjectileScenes = Array[PackedScene]([ExtResource("4_plasmabolt"), ExtResource("21_missile"), ExtResource("17_plasmablob"), ExtResource("18_crystalspine"), ExtResource("19_organicspore"), ExtResource("10_cblast"), ExtResource("11_foxpulse"), ExtResource("12_shuriken")])
 
 ; ── Checkpoints ─────────────────────────────────────────────────────────────────
 ; Three Marker2D nodes define respawn positions.  Indices match the JSON events:
